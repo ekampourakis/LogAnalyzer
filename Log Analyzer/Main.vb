@@ -289,7 +289,13 @@ Public Class Main
             Areas = My.Settings.Chart_MaxChartAreas
         End If
         For Index As Integer = 0 To Chart.ChartAreas.Count - 1
-            Chart.ChartAreas(Index).Position = New ElementPosition(0, Areas_Index * 100 / Areas, 100, 100 / Areas)
+
+            If Areas_Index < 0 Or Areas_Index > My.Settings.Chart_MaxChartAreas Then
+                Chart.ChartAreas(Index).Visible = False
+            Else
+                Chart.ChartAreas(Index).Visible = True
+                Chart.ChartAreas(Index).Position = New ElementPosition(0, Areas_Index * 100 / Areas, 100, 100 / Areas)
+            End If
             Areas_Index += 1
         Next
     End Sub
