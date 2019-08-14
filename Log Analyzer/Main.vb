@@ -513,10 +513,10 @@ Public Class Main
         End If
 
         If Chart.ChartAreas.Count > 0 Then
-            If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd()) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Then
+            Dim SelectionLength As TimeSpan = SelectionSize()
+            If SelectionLength = TimeSpan.Zero Then
                 Exit Sub
             End If
-            Dim SelectionLength As TimeSpan = (DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionEnd) - DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionStart)).Duration
             ToolStripStatusLabel_Scale.Text &= ", Selection Length: "
             If SelectionLength.TotalSeconds > 60 Then
                 ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMinutes.ToString("F1") & " min"
@@ -697,6 +697,14 @@ Public Class Main
 
 #Region "Chart Menu"
 
+    Private Function SelectionSize() As TimeSpan
+        If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd()) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Then
+            Return TimeSpan.Zero
+        End If
+        Dim SelectionLength As TimeSpan = (DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionEnd) - DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionStart)).Duration
+        Return SelectionLength
+    End Function
+
     Private Sub ResetScaleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ResetScaleToolStripMenuItem.Click
         If Chart.ChartAreas.Count > 0 Then
             Chart.ChartAreas(0).AxisX.ScaleView.Size = LogFileLength
@@ -707,7 +715,10 @@ Public Class Main
     Private Sub ZoomToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZoomToSelectionToolStripMenuItem.Click
         If Chart.ChartAreas.Count > 0 Then
             If Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) And Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd) Then
-                Chart.ChartAreas(0).AxisX.ScaleView.Zoom(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd)
+                ScaleSize = SelectionSize.TotalSeconds
+                ScalePosition = Math.Min(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd)
+                Chart.ChartAreas(0).AxisX.ScaleView.Size = ScaleSize
+                Chart.ChartAreas(0).AxisX.ScaleView.Position = ScalePosition
             End If
         End If
     End Sub
