@@ -25,6 +25,10 @@ Partial Class Main
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Main))
         Me.Chart = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.ContextMenuStrip_Chart = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ResetScaleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ZoomToSelectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckedListBox = New System.Windows.Forms.CheckedListBox()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -33,31 +37,53 @@ Partial Class Main
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
         Me.VScrollBar = New System.Windows.Forms.VScrollBar()
-        Me.CheckBox_Plotting_Sync = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_AutoScale = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_ShowLegends = New System.Windows.Forms.CheckBox()
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.CheckBox_ShowValues = New System.Windows.Forms.CheckBox()
         Me.StatusStrip = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel_Scale = New System.Windows.Forms.ToolStripStatusLabel()
         Me.Timer_ChartUpdate = New System.Windows.Forms.Timer(Me.components)
         Me.Timer_SeriesHide = New System.Windows.Forms.Timer(Me.components)
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.HideLegendsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'Chart
         '
+        Me.Chart.ContextMenuStrip = Me.ContextMenuStrip_Chart
         Me.Chart.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Chart.Location = New System.Drawing.Point(0, 24)
         Me.Chart.Name = "Chart"
         Me.Chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry
         Me.Chart.Size = New System.Drawing.Size(611, 438)
         Me.Chart.TabIndex = 0
+        '
+        'ContextMenuStrip_Chart
+        '
+        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem})
+        Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(174, 82)
+        '
+        'ResetScaleToolStripMenuItem
+        '
+        Me.ResetScaleToolStripMenuItem.Name = "ResetScaleToolStripMenuItem"
+        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.ResetScaleToolStripMenuItem.Text = "Reset Scale"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
+        '
+        'ZoomToSelectionToolStripMenuItem
+        '
+        Me.ZoomToSelectionToolStripMenuItem.Name = "ZoomToSelectionToolStripMenuItem"
+        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.ZoomToSelectionToolStripMenuItem.Text = "Zoom To Selection"
         '
         'CheckedListBox
         '
@@ -120,57 +146,9 @@ Partial Class Main
         Me.VScrollBar.Size = New System.Drawing.Size(20, 438)
         Me.VScrollBar.TabIndex = 6
         '
-        'CheckBox_Plotting_Sync
-        '
-        Me.CheckBox_Plotting_Sync.AutoSize = True
-        Me.CheckBox_Plotting_Sync.Checked = True
-        Me.CheckBox_Plotting_Sync.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_Plotting_Sync.Location = New System.Drawing.Point(84, 5)
-        Me.CheckBox_Plotting_Sync.Name = "CheckBox_Plotting_Sync"
-        Me.CheckBox_Plotting_Sync.Size = New System.Drawing.Size(50, 17)
-        Me.CheckBox_Plotting_Sync.TabIndex = 19
-        Me.CheckBox_Plotting_Sync.Text = "Sync"
-        Me.CheckBox_Plotting_Sync.UseVisualStyleBackColor = True
-        '
-        'CheckBox_AutoScale
-        '
-        Me.CheckBox_AutoScale.AutoSize = True
-        Me.CheckBox_AutoScale.Checked = True
-        Me.CheckBox_AutoScale.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_AutoScale.Location = New System.Drawing.Point(140, 5)
-        Me.CheckBox_AutoScale.Name = "CheckBox_AutoScale"
-        Me.CheckBox_AutoScale.Size = New System.Drawing.Size(78, 17)
-        Me.CheckBox_AutoScale.TabIndex = 18
-        Me.CheckBox_AutoScale.Text = "Auto Scale"
-        Me.CheckBox_AutoScale.UseVisualStyleBackColor = True
-        '
-        'CheckBox_ShowLegends
-        '
-        Me.CheckBox_ShowLegends.AutoSize = True
-        Me.CheckBox_ShowLegends.Checked = True
-        Me.CheckBox_ShowLegends.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_ShowLegends.Location = New System.Drawing.Point(224, 5)
-        Me.CheckBox_ShowLegends.Name = "CheckBox_ShowLegends"
-        Me.CheckBox_ShowLegends.Size = New System.Drawing.Size(67, 17)
-        Me.CheckBox_ShowLegends.TabIndex = 22
-        Me.CheckBox_ShowLegends.Text = "Legends"
-        Me.CheckBox_ShowLegends.UseVisualStyleBackColor = True
-        '
         'ToolTip
         '
         Me.ToolTip.AutomaticDelay = 100
-        '
-        'CheckBox_ShowValues
-        '
-        Me.CheckBox_ShowValues.AutoSize = True
-        Me.CheckBox_ShowValues.Checked = True
-        Me.CheckBox_ShowValues.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox_ShowValues.Location = New System.Drawing.Point(297, 5)
-        Me.CheckBox_ShowValues.Name = "CheckBox_ShowValues"
-        Me.CheckBox_ShowValues.Size = New System.Drawing.Size(58, 17)
-        Me.CheckBox_ShowValues.TabIndex = 25
-        Me.CheckBox_ShowValues.Text = "Values"
-        Me.CheckBox_ShowValues.UseVisualStyleBackColor = True
         '
         'StatusStrip
         '
@@ -208,43 +186,42 @@ Partial Class Main
         'Label_Breakpoint
         '
         Me.Label_Breakpoint.AutoSize = True
-        Me.Label_Breakpoint.Location = New System.Drawing.Point(546, 6)
+        Me.Label_Breakpoint.Location = New System.Drawing.Point(513, 8)
         Me.Label_Breakpoint.Name = "Label_Breakpoint"
         Me.Label_Breakpoint.Size = New System.Drawing.Size(35, 13)
         Me.Label_Breakpoint.TabIndex = 28
         Me.Label_Breakpoint.Text = "Break"
+        Me.Label_Breakpoint.Visible = False
         '
-        'Button1
+        'ToolStripSeparator2
         '
-        Me.Button1.Location = New System.Drawing.Point(437, 12)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 29
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(170, 6)
+        '
+        'HideLegendsToolStripMenuItem
+        '
+        Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
+        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
         '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(757, 484)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Label_Breakpoint)
         Me.Controls.Add(Me.Chart)
         Me.Controls.Add(Me.VScrollBar)
         Me.Controls.Add(Me.Label_Series)
         Me.Controls.Add(Me.CheckedListBox)
         Me.Controls.Add(Me.StatusStrip)
-        Me.Controls.Add(Me.CheckBox_ShowValues)
-        Me.Controls.Add(Me.CheckBox_ShowLegends)
-        Me.Controls.Add(Me.CheckBox_Plotting_Sync)
-        Me.Controls.Add(Me.CheckBox_AutoScale)
         Me.Controls.Add(Me.MenuStrip)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip
         Me.Name = "Main"
         Me.Text = "UoP Racing - Log Analyzer"
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ContextMenuStrip_Chart.ResumeLayout(False)
         Me.MenuStrip.ResumeLayout(False)
         Me.MenuStrip.PerformLayout()
         Me.StatusStrip.ResumeLayout(False)
@@ -261,11 +238,7 @@ Partial Class Main
     Friend WithEvents OpenToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenFileDialog As OpenFileDialog
     Friend WithEvents VScrollBar As VScrollBar
-    Friend WithEvents CheckBox_Plotting_Sync As CheckBox
-    Friend WithEvents CheckBox_AutoScale As CheckBox
-    Friend WithEvents CheckBox_ShowLegends As CheckBox
     Friend WithEvents ToolTip As ToolTip
-    Friend WithEvents CheckBox_ShowValues As CheckBox
     Friend WithEvents StatusStrip As StatusStrip
     Friend WithEvents Timer_ChartUpdate As Timer
     Friend WithEvents Timer_SeriesHide As Timer
@@ -274,5 +247,10 @@ Partial Class Main
     Friend WithEvents SettingsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripStatusLabel_Scale As ToolStripStatusLabel
     Friend WithEvents Label_Breakpoint As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents ContextMenuStrip_Chart As ContextMenuStrip
+    Friend WithEvents ResetScaleToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ZoomToSelectionToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents HideLegendsToolStripMenuItem As ToolStripMenuItem
 End Class

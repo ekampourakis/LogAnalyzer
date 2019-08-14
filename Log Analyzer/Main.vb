@@ -18,6 +18,7 @@ Public Class Main
 #End Region
 
 #Region "Log Opening"
+
     Dim LogFile As String()
     Dim LogHeaders As String()
     Dim LogFileLength As Integer = 0
@@ -61,9 +62,9 @@ Public Class Main
                 Exit For
             End If
         Next
-        Dim CutLogFile(StopIndex - 1) As String
-        For Index As Integer = 1 To StopIndex
-            CutLogFile(Index - 1) = LogFile(Index)
+        Dim CutLogFile(StopIndex) As String
+        For Index As Integer = 0 To StopIndex
+            CutLogFile(Index) = LogFile(Index)
         Next
         LogFile = CutLogFile
         MinTime = LogFile(1).Split(LogDelimiter)(0)
@@ -89,17 +90,18 @@ Public Class Main
     Private Sub OpenFileDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog.FileOk
         OpenLogFile(OpenFileDialog.FileName)
     End Sub
+
 #End Region
 
+#Region "Chart Loading"
+
     Private Sub SetChartArea(ByRef Area As ChartArea)
+
         Dim AreaSeries As String = Chart.Series(Area.Name.Replace("ChartArea_", "Series_")).Name
         Dim Series As Series = Chart.Series(AreaSeries)
 
-        'Area.AxisX.Minimum = LogFile(1).Split(LogDelimiter)(0) / 1000
-        'Area.AxisX.Maximum = LogFile(LogFile.Count - 1).Split(LogDelimiter)(0) / 1000
-
         Area.AxisX.LabelStyle.Format = "HH:mm:ss"
-        Area.AxisX.LabelStyle.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Seconds
         Area.AxisX.LabelStyle.Interval = ScaleSize / My.Settings.Chart_Scale_Interval
         Area.AxisX.MajorGrid.LineColor = My.Settings.Chart_GridColor
         Area.AxisY.MajorGrid.LineColor = My.Settings.Chart_GridColor
@@ -107,37 +109,35 @@ Public Class Main
         Area.AxisX.MajorGrid.Enabled = True
         Area.AxisX.MajorTickMark.Enabled = True
         Area.AxisX.MinorGrid.Enabled = False
-        Area.AxisX.MajorGrid.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Seconds
         Area.AxisX.MajorGrid.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids
-        Area.AxisX.MajorTickMark.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.MajorTickMark.IntervalType = DateTimeIntervalType.Seconds
         Area.AxisX.MajorTickMark.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 2
         Area.AxisX.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea
 
-        Area.AxisX.MinorGrid.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.MinorGrid.IntervalType = DateTimeIntervalType.Seconds
         Area.AxisX.MinorGrid.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 5
         Area.AxisX.MinorGrid.LineColor = System.Drawing.Color.LightGray
-        Area.AxisX.MinorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot
-        Area.AxisX.ScaleView.MinSizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot
+        Area.AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Seconds
         Area.AxisX.ScaleView.MinSize = My.Settings.Chart_Scale_MaxZoom
-        Area.AxisX.ScaleView.SizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
-        Area.AxisX.ScaleView.Size = LogFileLength '20.0R
-        Area.AxisX.ScaleView.SmallScrollSizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
-        'Area.AxisX.ScaleView.SmallScrollMinSizeType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds
+        Area.AxisX.ScaleView.SizeType = DateTimeIntervalType.Seconds
+        Area.AxisX.ScaleView.Size = LogFileLength
+        Area.AxisX.ScaleView.SmallScrollSizeType = DateTimeIntervalType.Seconds
         Area.AxisX.ScaleView.SmallScrollSize = 1.0R
 
-        Area.AxisX.ScaleView.Zoomable = True
-
+        ' Enable this to enable the zoom using the cursor
+        Area.AxisX.ScaleView.Zoomable = False
         Area.AxisX.ScrollBar.BackColor = System.Drawing.Color.White
         Area.AxisX.ScrollBar.ButtonColor = System.Drawing.SystemColors.ControlLight
         Area.AxisX.ScrollBar.LineColor = System.Drawing.Color.Black
 
         Area.CursorX.IsUserEnabled = True
         Area.CursorX.IsUserSelectionEnabled = True
-        Area.CursorX.AutoScroll = True
+        Area.CursorX.AutoScroll = False
         Area.CursorX.AxisType = AxisType.Primary
-        Area.CursorX.IntervalType = DateTimeIntervalType.Milliseconds
+        Area.CursorX.IntervalType = DateTimeIntervalType.Seconds
         Area.CursorX.Interval = 0.0R
-
 
     End Sub
 
@@ -210,7 +210,7 @@ Public Class Main
                 Legend.IsEquallySpacedItems = True
                 Legend.LegendStyle = LegendStyle.Column
                 Chart.Legends.Add(Legend)
-                Legend.Enabled = CheckBox_ShowLegends.Checked
+                Legend.Enabled = True
 
                 ' Create the series for the area
                 Dim Series As New Series
@@ -264,6 +264,8 @@ Public Class Main
         AutoScaleY()
     End Sub
 
+#End Region
+
 #Region "Chart"
 
     Private ScaleSize As Double = 0 ' auto calculated when series are loaded
@@ -299,23 +301,20 @@ Public Class Main
         End If
     End Sub
 
-    ' Keep the X-axis scroll aligned between all charts
-    Private Sub Chart_AxisViewChanged(sender As Object, e As ViewEventArgs) Handles Chart.AxisViewChanged
-        If CheckBox_Plotting_Sync.Checked Then
-
-            For Each Area As ChartArea In Chart.ChartAreas
-                If e.Axis Is Area.AxisX Then
-                    For Each Area2 As ChartArea In Chart.ChartAreas
-                        If Area2 IsNot Area Then
-                            Area2.AxisX.ScaleView = e.Axis.ScaleView
-                        End If
-                    Next
-                    Exit Sub
-                End If
-            Next
-        End If
+    Private Sub SyncChartAreas(ByRef ChangedArea As ChartArea)
+        For Each Area As ChartArea In Chart.ChartAreas
+            If Area IsNot ChangedArea Then
+                Area.AxisX.ScaleView.Size = ChangedArea.AxisX.ScaleView.Size
+                Area.AxisX.ScaleView.Scroll(ChangedArea.AxisX.ScaleView.Position)
+            End If
+        Next
         AutoScaleY()
         UpdateScales()
+    End Sub
+
+    ' Keep the X-axis scroll aligned between all charts
+    Private Sub Chart_AxisViewChanged(sender As Object, e As ViewEventArgs) Handles Chart.AxisViewChanged
+        SyncChartAreas(e.ChartArea)
     End Sub
 
 #End Region
@@ -324,22 +323,38 @@ Public Class Main
 
     Private Sub Chart_MouseWheel(sender As Object, e As MouseEventArgs) Handles Chart.MouseWheel
 
+        ' Static variable to help limit the zoom
+        Static LastZoomAction As Integer = 0
+
+        ' If there are no chart areas then exit cause we will be using the first chart area to zoom and scroll
+        If Chart.ChartAreas.Count <= 0 Then Exit Sub
+
         With My.Settings
             ' Dynamically calculate how many steps are required to fully zoom in
             Dim StepScaleSize As Double = (MaxScaleSize - .Chart_Scale_MaxZoom) / .Chart_Scale_ZoomSteps
             If (e.Delta > 0) Then
                 ' Zoom In
-                If ScaleSize > .Chart_Scale_MaxZoom Then
-                    ScaleSize -= StepScaleSize
-                Else
+                ' Don't allow further zoom in if we are already in the maximum zoom
+                If LastZoomAction = 1 Then Exit Sub Else LastZoomAction = 0
+                Dim NewScaleSize As Double = ScaleSize - StepScaleSize
+                If NewScaleSize < .Chart_Scale_MaxZoom Then
                     ScaleSize = .Chart_Scale_MaxZoom
+                    ' Limit zoom in
+                    LastZoomAction = 1
+                Else
+                    ScaleSize = NewScaleSize
                 End If
             ElseIf (e.Delta < 0) Then
                 ' Zoom Out
-                If ScaleSize < MaxScaleSize Then
-                    ScaleSize += StepScaleSize
-                Else
+                ' Don't allow further zoom out if we are already in the minimum zoom
+                If LastZoomAction = -1 Then Exit Sub Else LastZoomAction = 0
+                Dim NewScaleSize As Double = ScaleSize + StepScaleSize
+                If NewScaleSize > MaxScaleSize Then
                     ScaleSize = MaxScaleSize
+                    ' Limit zoom out
+                    LastZoomAction = -1
+                Else
+                    ScaleSize = NewScaleSize
                 End If
             End If
 
@@ -348,7 +363,8 @@ Public Class Main
             ' The pre zoom scale (in seconds)
             Dim CurrentScale As Double = Chart.ChartAreas(0).AxisX.ScaleView.Size
             ' The relative position of the cursor inside the chart area (in %)
-            Dim CursorPosition As Integer = 50 ' Percent
+            Dim CursorPosition As Integer = Math.Round(Map(Chart.ChartAreas(0).AxisX.PixelPositionToValue(e.X),
+            Chart.ChartAreas(0).AxisX.ScaleView.ViewMinimum, Chart.ChartAreas(0).AxisX.ScaleView.ViewMaximum, 0, 100)) ' Percent
             ' The ratio of the new scale size and the previous scale size
             Dim ScaleSizeRatio As Double = CurrentScale / ScaleSize
             ' The old minimum time of the X-axis (in OLE)
@@ -361,8 +377,6 @@ Public Class Main
             Dim NewMin As Double = Min
             ' The new maximum time of the X-axis (in OLE)
             Dim NewMax As Double = Max
-            ' The effect of the zoom to the X-axis (in seconds)
-            Dim SizeDifference As Double = Math.Abs(ScaleSize - CurrentScale)
 
             ' Variables to hold the new calculated minimum/maximum views
             Dim _NewMin, _NewMax As New DateTime
@@ -371,17 +385,18 @@ Public Class Main
             If ScaleSizeRatio > 1 Then
                 ' Zoom In
 
-                ' The total percentage of the amount of time that needs to be removed from the new scale (in %)
-                Dim Multiplier As Double = (1.0 - (ScaleSize / CurrentScale)) * 100.0
+                ' The total percentage of the amount of time that needs to be removed from the new scale (in fraction)
+                Dim Multiplier As Double = (1.0 - (ScaleSize / CurrentScale))
                 ' The total amount of time that needs to be removed from the new scale (in seconds)
-                Dim TimeLoss As Double = CurrentScale * Multiplier / 100.0
+                Dim TimeLoss As Double = CurrentScale * Multiplier
                 ' The fraction of the Multiplier that needs to be removed from the left of the pivot (in %)
                 Dim LeftMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 0.0, 1.0)
                 ' The fraction of the Multiplier that needs to be removed from the right of the pivot (in %)
-                Dim RightMultipler As Double = Map(CursorPosition, 0.0, 100.0, 1.0, 0.0)
+                Dim RightMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 1.0, 0.0)
                 ' The amount of time that needs to be removed from each side of the pivot (in seconds)
                 Dim LeftAmount As Double = TimeLoss * LeftMultiplier
-                Dim RightAmount As Double = TimeLoss * RightMultipler
+                Dim RightAmount As Double = TimeLoss * RightMultiplier
+
                 ' Calculate the new view minimums/maximums
                 NewMin = DateTime.FromOADate(Min).AddSeconds(LeftAmount).ToOADate()
                 NewMax = DateTime.FromOADate(Max).Subtract(New TimeSpan(0, 0, RightAmount)).ToOADate()
@@ -390,11 +405,30 @@ Public Class Main
                 _NewMax = DateTime.FromOADate(NewMax)
                 ' Calculate the size of the new scale view (in seconds)
                 _NewSize = _NewMax.Subtract(_NewMin).TotalSeconds
-
             Else
                 ' Zoom Out
 
+                ' The total percentage of the amount of time that needs to be added to the new scale (in fraction)
+                Dim Multiplier As Double = (1.0 - (CurrentScale / ScaleSize))
+                ' The total amount of time that needs to be added to the new scale (in seconds)
+                Dim TimeGain As Double = CurrentScale * Multiplier
+                ' TODO: Maybe invert those two
+                ' The fraction of the Multiplier that needs to be added to the left of the pivot (in %)
+                Dim LeftMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 1.0, 0.0)
+                ' The fraction of the Multiplier that needs to be added to the right of the pivot (in %)
+                Dim RightMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 0.0, 1.0)
+                ' The amount of time that needs to be removed from each side of the pivot (in seconds)
+                Dim LeftAmount As Double = TimeGain * LeftMultiplier
+                Dim RightAmount As Double = TimeGain * RightMultiplier
 
+                ' Calculate the new view minimums/maximums
+                NewMin = DateTime.FromOADate(Min).Subtract(New TimeSpan(0, 0, LeftAmount)).ToOADate()
+                NewMax = DateTime.FromOADate(Max).AddSeconds(RightAmount).ToOADate()
+                ' Convert the views to their equivalent datetime
+                _NewMin = DateTime.FromOADate(NewMin)
+                _NewMax = DateTime.FromOADate(NewMax)
+                ' Calculate the size of the new scale view (in seconds)
+                _NewSize = _NewMax.Subtract(_NewMin).TotalSeconds
 
             End If
 
@@ -404,11 +438,12 @@ Public Class Main
             ScalePosition = NewMin
             Chart.ChartAreas(0).AxisX.ScaleView.Scroll(ScalePosition)
 
+            ' Fix the charts
+            SyncChartAreas(Chart.ChartAreas(0))
+            UpdateScales()
+            AutoScaleY()
+
         End With
-
-
-        UpdateScales()
-        AutoScaleY()
 
     End Sub
 
@@ -418,39 +453,73 @@ Public Class Main
 
     ' Fit all values in the Y-axis
     Private Sub AutoScaleY()
-        If CheckBox_AutoScale.Checked Then
-            For Each Area As ChartArea In Chart.ChartAreas
-                For Each Series As Series In Chart.Series
-                    If Series.ChartArea = Area.Name And Series.Enabled Then
-                        Dim viewMin As Double = Area.AxisX.ScaleView.ViewMinimum
-                        Dim viewMax As Double = Area.AxisX.ScaleView.ViewMaximum
-                        Dim min As DataPoint = New DataPoint(0, Double.MaxValue)
-                        Dim max As DataPoint = New DataPoint(0, Double.MinValue)
-                        'Loop through all points to find min & max
-                        For Each dp As DataPoint In Series.Points
-                            'Set min & max points only in the range of the view
-                            If dp.XValue >= viewMin And dp.XValue <= viewMax Then
-                                'Compares Yvalues(0)
-                                If dp.YValues(0) > max.YValues(0) Then max = dp
-                                If dp.YValues(0) < min.YValues(0) Then min = dp
-                            ElseIf dp.XValue >= viewMax Then
-                                'Exit for if already past the view
-                                Exit For
-                            End If
-                        Next
-                        'How much space you want between axes and zoomed min & max.
-                        'A bit tricky as it has to depend on the scale of the zoom.
-                        'Feel free to improve the algorithm.
-                        Dim buffer As Double = Math.Max(10 ^ Math.Floor(Math.Log10(max.YValues(0) - min.YValues(0))) / 10, 1)
-                        Area.AxisY.Minimum = min.YValues(0) - buffer
-                        Area.AxisY.Maximum = max.YValues(0) + buffer
-                    End If
-                Next
+        For Each Area As ChartArea In Chart.ChartAreas
+            For Each Series As Series In Chart.Series
+                If Series.ChartArea = Area.Name And Series.Enabled Then
+                    Dim viewMin As Double = Area.AxisX.ScaleView.ViewMinimum
+                    Dim viewMax As Double = Area.AxisX.ScaleView.ViewMaximum
+                    Dim min As DataPoint = New DataPoint(0, Double.MaxValue)
+                    Dim max As DataPoint = New DataPoint(0, Double.MinValue)
+                    'Loop through all points to find min & max
+                    For Each dp As DataPoint In Series.Points
+                        'Set min & max points only in the range of the view
+                        If dp.XValue >= viewMin And dp.XValue <= viewMax Then
+                            'Compares Yvalues(0)
+                            If dp.YValues(0) > max.YValues(0) Then max = dp
+                            If dp.YValues(0) < min.YValues(0) Then min = dp
+                        ElseIf dp.XValue >= viewMax Then
+                            'Exit for if already past the view
+                            Exit For
+                        End If
+                    Next
+                    'How much space you want between axes and zoomed min & max.
+                    'A bit tricky as it has to depend on the scale of the zoom.
+                    'Feel free to improve the algorithm.
+                    Dim buffer As Double = Math.Max(10 ^ Math.Floor(Math.Log10(max.YValues(0) - min.YValues(0))) / 10, 1)
+                    Area.AxisY.Minimum = min.YValues(0) - buffer
+                    Area.AxisY.Maximum = max.YValues(0) + buffer
+                End If
             Next
-        End If
+        Next
     End Sub
 
 #End Region
+
+    ' Show the chart X-axis scale and grid/selection size in the status bar
+    Private Sub UpdateScales()
+
+        ' ScaleSize is measured in seconds
+        If ScaleSize < 1 Then
+            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize * 1000.0).ToString("F") & " msec, "
+        ElseIf ScaleSize > 60 Then
+            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize / 60.0).ToString("F1") & " min, "
+        Else
+            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize).ToString("F1") & " sec, "
+        End If
+        If (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) < 1 Then
+            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids * 1000.0).ToString("F") & " msec"
+        ElseIf (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 60 Then
+            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60.0).ToString("F1") & " min"
+        Else
+            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F1") & " sec"
+        End If
+
+        If Chart.ChartAreas.Count > 0 Then
+            If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd()) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Then
+                Exit Sub
+            End If
+            Dim SelectionLength As TimeSpan = (DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionEnd) - DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionStart)).Duration
+            ToolStripStatusLabel_Scale.Text &= ", Selection Length: "
+            If SelectionLength.TotalSeconds > 60 Then
+                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMinutes.ToString("F1") & " min"
+            ElseIf SelectionLength.TotalSeconds < 1 Then
+                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMilliseconds.ToString("F") & " msec"
+            Else
+                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalSeconds.ToString("F1") & " sec"
+            End If
+        End If
+
+    End Sub
 
 #End Region
 
@@ -467,6 +536,14 @@ Public Class Main
         Selecting = True
         SelectionStart = DateTime.FromOADate(e.NewSelectionStart)
         SelectionEnd = DateTime.FromOADate(e.NewSelectionEnd)
+
+        ' Sync selection between charts
+        For Each Area As ChartArea In Chart.ChartAreas
+            If Area IsNot e.ChartArea Then
+                Area.CursorX.SelectionStart = e.NewSelectionStart
+                Area.CursorX.SelectionEnd = e.NewSelectionEnd
+            End If
+        Next
     End Sub
 
     ' Cursor selection changed
@@ -527,62 +604,29 @@ Public Class Main
 
             Next
 
-            ' Show the tooltip
-            If CheckBox_ShowValues.Checked Then
-                ' If cursor is selecting then show the selection range
-                If Selecting Then
-                    Values = "Selection Start: " & SelectionStart.ToString("hh:mm:ss.fff") & vbNewLine
-                    Values &= "Selection End: " & SelectionEnd.ToString("hh:mm:ss.fff") & vbNewLine
-                    Dim Length As Double = Math.Abs(SelectionEnd.Subtract(SelectionStart).TotalMilliseconds)
-                    Values &= "Selection Length: "
-                    If Length < 1000 Then
-                        Values &= Length.ToString("F") & " msec"
-                    ElseIf Length < 60000 Then
-                        Values &= (Length / 1000).ToString("F1") & " sec"
-                    Else
-                        Values &= (Length / 60000).ToString("F1") & " min"
-                    End If
-                    ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
+            ' If cursor is selecting then show the selection range
+            If Selecting Then
+                Values = "Selection Start: " & SelectionStart.ToString("hh:mm:ss.fff") & vbNewLine
+                Values &= "Selection End: " & SelectionEnd.ToString("hh:mm:ss.fff") & vbNewLine
+                Dim Length As Double = Math.Abs(SelectionEnd.Subtract(SelectionStart).TotalMilliseconds)
+                Values &= "Selection Length: "
+                If Length < 1000 Then
+                    Values &= Length.ToString("F") & " msec"
+                ElseIf Length < 60000 Then
+                    Values &= (Length / 1000).ToString("F1") & " sec"
                 Else
-                    ' Else show the chart values
-                    ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
+                    Values &= (Length / 60000).ToString("F1") & " min"
                 End If
-
+                ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
+            Else
+                ' Else show the chart values
+                ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
             End If
 
         End If
     End Sub
 
 #End Region
-
-    ' Show the chart X-axis scale and grid size in the status bar
-    Private Sub UpdateScales()
-        ' ScaleSize is measured in seconds
-        If ScaleSize < 1 Then
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize * 1000.0).ToString("F") & " msec, "
-        ElseIf ScaleSize > 60 Then
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize / 60.0).ToString("F1") & " min, "
-        Else
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize).ToString("F1") & " sec, "
-        End If
-        If (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) < 1 Then
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids * 1000.0).ToString("F") & " msec"
-        ElseIf (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 60 Then
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60.0).ToString("F1") & " min"
-        Else
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F1") & " sec"
-        End If
-
-        ToolStripStatusLabel_Scale.Text &= " , Min: " & Chart.ChartAreas(0).AxisX.ScaleView.ViewMinimum & " , Max: " &
-            Chart.ChartAreas(0).AxisX.ScaleView.ViewMaximum & " , Position: " & Chart.ChartAreas(0).AxisX.ScaleView.Position
-    End Sub
-
-    ' Show/hide the legends when the setting is changed
-    Private Sub CheckBox_ShowLegends_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ShowLegends.CheckedChanged
-        For Each Legend As Legend In Chart.Legends
-            Legend.Enabled = CheckBox_ShowLegends.Checked
-        Next
-    End Sub
 
 #Region "Series Selection"
 
@@ -641,12 +685,37 @@ Public Class Main
         X = 1
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        'Chart.ChartAreas(0).AxisX.ScaleView.Position = ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate()
-        Chart.ChartAreas(0).AxisX.ScaleView.Scroll(ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate())
-        Chart.ChartAreas(0).AxisX.ScaleView.Size = LogFileLength
-        Chart.Invalidate()
-        UpdateScales()
+#End Region
+
+#Region "Chart Menu"
+
+    Private Sub ResetScaleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ResetScaleToolStripMenuItem.Click
+        If Chart.ChartAreas.Count > 0 Then
+            Chart.ChartAreas(0).AxisX.ScaleView.Size = LogFileLength
+            Chart.ChartAreas(0).AxisX.ScaleView.Scroll(ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate)
+        End If
+    End Sub
+
+    Private Sub ZoomToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZoomToSelectionToolStripMenuItem.Click
+        If Chart.ChartAreas.Count > 0 Then
+            If Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) And Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd) Then
+                Chart.ChartAreas(0).AxisX.ScaleView.Zoom(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd)
+            End If
+        End If
+    End Sub
+
+    Private Sub HideLegendsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideLegendsToolStripMenuItem.Click
+        If HideLegendsToolStripMenuItem.Text = "Hide Legends" Then
+            For Each Legend As Legend In Chart.Legends
+                Legend.Enabled = False
+            Next
+            HideLegendsToolStripMenuItem.Text = "Show Legends"
+        Else
+            For Each Legend As Legend In Chart.Legends
+                Legend.Enabled = True
+            Next
+            HideLegendsToolStripMenuItem.Text = "Hide Legends"
+        End If
     End Sub
 
 #End Region
