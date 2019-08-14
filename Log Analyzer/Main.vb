@@ -8,6 +8,7 @@ Public Class Main
     End Sub
 
 #Region "Helper"
+
     Private Function Map(ByVal Value As Double, ByVal Low As Double, ByVal High As Double, ByVal toLow As Double, ByVal toHigh As Double)
         Return (Value - Low) * (toHigh - toLow) / (High - Low) + toLow
     End Function
@@ -15,6 +16,11 @@ Public Class Main
     Private Function ClosestPoint(ByRef Values As DataPointCollection, ByVal Value As Double) As DataPoint
         Return Values.Aggregate(Function(x, y) If(Math.Abs(x.XValue - Value) < Math.Abs(y.XValue - Value), x, y))
     End Function
+
+    Private Function ChartEmpty() As Boolean
+        Return Chart.ChartAreas.Count <= 0
+    End Function
+
 #End Region
 
 #Region "Log Opening"
@@ -311,6 +317,10 @@ Public Class Main
 
     Private Sub SyncChartAreas(ByRef ChangedArea As ChartArea)
         For Each Area As ChartArea In Chart.ChartAreas
+            ' Dynamically create the grid
+            Area.AxisX.LabelStyle.Interval = ScaleSize / My.Settings.Chart_Scale_Interval
+            Area.AxisX.MajorGrid.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids
+            Area.AxisX.MajorTickMark.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 2
             If Area IsNot ChangedArea Then
                 Area.AxisX.ScaleView.Size = ChangedArea.AxisX.ScaleView.Size
                 Area.AxisX.ScaleView.Scroll(ChangedArea.AxisX.ScaleView.Position)
@@ -329,6 +339,18 @@ Public Class Main
 
 #Region "Zooming"
 
+    Private Sub ZoomChart(ByVal Scale As Double, ByVal Position As Double)
+        If Not ChartEmpty() Then
+            ScaleSize = Scale
+            ScalePosition = Position
+            Chart.ChartAreas(0).AxisX.ScaleView.Size = ScaleSize
+            Chart.ChartAreas(0).AxisX.ScaleView.Position = ScalePosition
+            SyncChartAreas(Chart.ChartAreas(0))
+        End If
+
+    End Sub
+
+    ' FIXME: Fix the zooming out when one side is already fully shown
     Private Sub Chart_MouseWheel(sender As Object, e As MouseEventArgs) Handles Chart.MouseWheel
 
         ' Static variable to help limit the zoom
@@ -706,21 +728,13 @@ Public Class Main
     End Function
 
     Private Sub ResetScaleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ResetScaleToolStripMenuItem.Click
-        If Chart.ChartAreas.Count > 0 Then
-            Chart.ChartAreas(0).AxisX.ScaleView.Size = LogFileLength
-            Chart.ChartAreas(0).AxisX.ScaleView.Scroll(ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate)
-        End If
+        ZoomChart(LogFileLength, ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate)
     End Sub
 
     Private Sub ZoomToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZoomToSelectionToolStripMenuItem.Click
-        If Chart.ChartAreas.Count > 0 Then
-            If Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) And Not Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd) Then
-                ScaleSize = SelectionSize.TotalSeconds
-                ScalePosition = Math.Min(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd)
-                Chart.ChartAreas(0).AxisX.ScaleView.Size = ScaleSize
-                Chart.ChartAreas(0).AxisX.ScaleView.Position = ScalePosition
-            End If
-        End If
+        If ChartEmpty() Then Exit Sub
+        If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd) Then Exit Sub
+        ZoomChart(SelectionSize.TotalSeconds, Math.Min(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd))
     End Sub
 
     Private Sub HideLegendsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideLegendsToolStripMenuItem.Click
@@ -738,5 +752,7 @@ Public Class Main
     End Sub
 
 #End Region
+
+
 
 End Class
