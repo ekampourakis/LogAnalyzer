@@ -33,6 +33,7 @@ Public Class Main
 
     Private Sub OpenLogFile(ByVal Path As String)
         ' Open the file
+        If Not IO.File.Exists(Path) Then Exit Sub
         LogFile = IO.File.ReadAllLines(Path)
         ' Load the file into the structures
         If Not LogFile(0).Contains(LogDelimiter) Then LogDelimiter = SecondLogDelimiter
@@ -51,6 +52,7 @@ Public Class Main
             LogType = LogFileType.Generic
             LoadLogFile_6()
         End If
+        ToolStripStatusLabel_LogFile.Text = Path
     End Sub
 
     Private Sub LoadLogFile_6()

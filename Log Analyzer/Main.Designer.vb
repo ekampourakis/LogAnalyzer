@@ -46,6 +46,8 @@ Partial Class Main
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.HideLegendsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel_LogFile = New System.Windows.Forms.ToolStripStatusLabel()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -115,7 +117,7 @@ Partial Class Main
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'EditToolStripMenuItem
@@ -128,7 +130,7 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'OpenFileDialog
@@ -152,7 +154,7 @@ Partial Class Main
         '
         'StatusStrip
         '
-        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Scale})
+        Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Scale, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel_LogFile})
         Me.StatusStrip.Location = New System.Drawing.Point(0, 462)
         Me.StatusStrip.Name = "StatusStrip"
         Me.StatusStrip.Size = New System.Drawing.Size(757, 22)
@@ -161,8 +163,8 @@ Partial Class Main
         'ToolStripStatusLabel_Scale
         '
         Me.ToolStripStatusLabel_Scale.Name = "ToolStripStatusLabel_Scale"
-        Me.ToolStripStatusLabel_Scale.Size = New System.Drawing.Size(120, 17)
-        Me.ToolStripStatusLabel_Scale.Text = "Scale Size: , Grid Size: "
+        Me.ToolStripStatusLabel_Scale.Size = New System.Drawing.Size(292, 17)
+        Me.ToolStripStatusLabel_Scale.Text = "Scale Size: NaN, Grid Size: NaN, Selection Length: NaN"
         '
         'Timer_ChartUpdate
         '
@@ -203,6 +205,18 @@ Partial Class Main
         Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
         Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
+        '
+        'ToolStripStatusLabel1
+        '
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(357, 17)
+        Me.ToolStripStatusLabel1.Spring = True
+        '
+        'ToolStripStatusLabel_LogFile
+        '
+        Me.ToolStripStatusLabel_LogFile.Name = "ToolStripStatusLabel_LogFile"
+        Me.ToolStripStatusLabel_LogFile.Size = New System.Drawing.Size(62, 17)
+        Me.ToolStripStatusLabel_LogFile.Text = "No log file"
         '
         'Main
         '
@@ -253,4 +267,6 @@ Partial Class Main
     Friend WithEvents ZoomToSelectionToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents HideLegendsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel_LogFile As ToolStripStatusLabel
 End Class
