@@ -228,7 +228,7 @@ Public Class Main
                 Series.Legend = Legend.Name
                 ' Include the MIN and MAX values to the legend
                 Series.LegendText = LogHeaders(Index) & " Min: #MIN{D0}, Max: #MAX{D0}"
-                Series.ChartType = SeriesChartType.FastLine
+                Series.ChartType = My.Settings.Chart_Series_Type 'SeriesChartType.FastPoint
                 Series.XValueType = ChartValueType.DateTime
                 Series.BorderWidth = 3
                 Series.YValueType = ChartValueType.Auto
@@ -750,6 +750,16 @@ Public Class Main
                 Legend.Enabled = True
             Next
             HideLegendsToolStripMenuItem.Text = "Hide Legends"
+        End If
+    End Sub
+
+    Private Sub HideAnnotationsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideAnnotationsToolStripMenuItem.Click
+        If HideAnnotationsToolStripMenuItem.Text = "Hide Annotations" Then
+            ToolTip.Active = False
+            HideAnnotationsToolStripMenuItem.Text = "Show Annotations"
+        Else
+            ToolTip.Active = True
+            HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
         End If
     End Sub
 

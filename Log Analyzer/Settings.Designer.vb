@@ -36,6 +36,8 @@ Partial Class Settings
         Me.Button_ResetDefaults = New System.Windows.Forms.Button()
         Me.Button_Reload = New System.Windows.Forms.Button()
         Me.Button_Save = New System.Windows.Forms.Button()
+        Me.Label_SeriesType = New System.Windows.Forms.Label()
+        Me.ComboBox_SeriesType = New System.Windows.Forms.ComboBox()
         CType(Me.TrackBar_ZoomSteps, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_ScaleInterval, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_XGrids, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -141,7 +143,8 @@ Partial Class Settings
         '
         'Button_ResetDefaults
         '
-        Me.Button_ResetDefaults.Location = New System.Drawing.Point(247, 245)
+        Me.Button_ResetDefaults.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_ResetDefaults.Location = New System.Drawing.Point(247, 286)
         Me.Button_ResetDefaults.Name = "Button_ResetDefaults"
         Me.Button_ResetDefaults.Size = New System.Drawing.Size(93, 23)
         Me.Button_ResetDefaults.TabIndex = 10
@@ -150,7 +153,8 @@ Partial Class Settings
         '
         'Button_Reload
         '
-        Me.Button_Reload.Location = New System.Drawing.Point(247, 274)
+        Me.Button_Reload.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button_Reload.Location = New System.Drawing.Point(247, 315)
         Me.Button_Reload.Name = "Button_Reload"
         Me.Button_Reload.Size = New System.Drawing.Size(93, 23)
         Me.Button_Reload.TabIndex = 11
@@ -159,19 +163,41 @@ Partial Class Settings
         '
         'Button_Save
         '
+        Me.Button_Save.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button_Save.Enabled = False
-        Me.Button_Save.Location = New System.Drawing.Point(247, 303)
+        Me.Button_Save.Location = New System.Drawing.Point(247, 344)
         Me.Button_Save.Name = "Button_Save"
         Me.Button_Save.Size = New System.Drawing.Size(93, 23)
         Me.Button_Save.TabIndex = 12
         Me.Button_Save.Text = "Save"
         Me.Button_Save.UseVisualStyleBackColor = True
         '
+        'Label_SeriesType
+        '
+        Me.Label_SeriesType.AutoSize = True
+        Me.Label_SeriesType.Location = New System.Drawing.Point(9, 329)
+        Me.Label_SeriesType.Name = "Label_SeriesType"
+        Me.Label_SeriesType.Size = New System.Drawing.Size(66, 13)
+        Me.Label_SeriesType.TabIndex = 13
+        Me.Label_SeriesType.Text = "Series Type:"
+        '
+        'ComboBox_SeriesType
+        '
+        Me.ComboBox_SeriesType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_SeriesType.FormattingEnabled = True
+        Me.ComboBox_SeriesType.Items.AddRange(New Object() {"Line", "Point"})
+        Me.ComboBox_SeriesType.Location = New System.Drawing.Point(12, 345)
+        Me.ComboBox_SeriesType.Name = "ComboBox_SeriesType"
+        Me.ComboBox_SeriesType.Size = New System.Drawing.Size(229, 21)
+        Me.ComboBox_SeriesType.TabIndex = 14
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(352, 338)
+        Me.ClientSize = New System.Drawing.Size(352, 379)
+        Me.Controls.Add(Me.ComboBox_SeriesType)
+        Me.Controls.Add(Me.Label_SeriesType)
         Me.Controls.Add(Me.Button_Save)
         Me.Controls.Add(Me.Button_Reload)
         Me.Controls.Add(Me.Button_ResetDefaults)
@@ -186,8 +212,7 @@ Partial Class Settings
         Me.Controls.Add(Me.Label_ZoomSteps)
         Me.Controls.Add(Me.Label_MaxZoom)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MaximumSize = New System.Drawing.Size(368, 377)
-        Me.MinimumSize = New System.Drawing.Size(368, 377)
+        Me.MinimumSize = New System.Drawing.Size(368, 418)
         Me.Name = "Settings"
         Me.Text = "Log Analyzer - Settings"
         CType(Me.TrackBar_ZoomSteps, System.ComponentModel.ISupportInitialize).EndInit()
@@ -213,4 +238,6 @@ Partial Class Settings
     Friend WithEvents Button_ResetDefaults As Button
     Friend WithEvents Button_Reload As Button
     Friend WithEvents Button_Save As Button
+    Friend WithEvents Label_SeriesType As Label
+    Friend WithEvents ComboBox_SeriesType As ComboBox
 End Class

@@ -125,6 +125,18 @@ Namespace My
                 Me("Chart_MaxChartAreas") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("FastPoint")>  _
+        Public Property Chart_Series_Type() As Global.System.Windows.Forms.DataVisualization.Charting.SeriesChartType
+            Get
+                Return CType(Me("Chart_Series_Type"),Global.System.Windows.Forms.DataVisualization.Charting.SeriesChartType)
+            End Get
+            Set
+                Me("Chart_Series_Type") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

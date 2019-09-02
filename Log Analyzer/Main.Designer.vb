@@ -48,6 +48,7 @@ Partial Class Main
         Me.Timer_SeriesHide = New System.Windows.Forms.Timer(Me.components)
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
+        Me.HideAnnotationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -58,47 +59,46 @@ Partial Class Main
         '
         Me.Chart.ContextMenuStrip = Me.ContextMenuStrip_Chart
         Me.Chart.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Chart.Location = New System.Drawing.Point(0, 28)
-        Me.Chart.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Chart.Location = New System.Drawing.Point(0, 24)
         Me.Chart.Name = "Chart"
         Me.Chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry
-        Me.Chart.Size = New System.Drawing.Size(822, 543)
+        Me.Chart.Size = New System.Drawing.Size(611, 438)
         Me.Chart.TabIndex = 0
         Me.Chart.Text = " "
         '
         'ContextMenuStrip_Chart
         '
         Me.ContextMenuStrip_Chart.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem})
+        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem})
         Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
-        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(204, 88)
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(181, 126)
         '
         'ResetScaleToolStripMenuItem
         '
         Me.ResetScaleToolStripMenuItem.Name = "ResetScaleToolStripMenuItem"
-        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(203, 24)
+        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ResetScaleToolStripMenuItem.Text = "Reset Scale"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(200, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
         '
         'ZoomToSelectionToolStripMenuItem
         '
         Me.ZoomToSelectionToolStripMenuItem.Name = "ZoomToSelectionToolStripMenuItem"
-        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(203, 24)
+        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ZoomToSelectionToolStripMenuItem.Text = "Zoom To Selection"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(200, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(177, 6)
         '
         'HideLegendsToolStripMenuItem
         '
         Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
-        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(203, 24)
+        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
         '
         'CheckedListBox
@@ -106,10 +106,9 @@ Partial Class Main
         Me.CheckedListBox.CheckOnClick = True
         Me.CheckedListBox.Dock = System.Windows.Forms.DockStyle.Right
         Me.CheckedListBox.FormattingEnabled = True
-        Me.CheckedListBox.Location = New System.Drawing.Point(842, 28)
-        Me.CheckedListBox.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.CheckedListBox.Location = New System.Drawing.Point(631, 24)
         Me.CheckedListBox.Name = "CheckedListBox"
-        Me.CheckedListBox.Size = New System.Drawing.Size(167, 543)
+        Me.CheckedListBox.Size = New System.Drawing.Size(126, 438)
         Me.CheckedListBox.TabIndex = 1
         Me.CheckedListBox.Visible = False
         '
@@ -119,8 +118,7 @@ Partial Class Main
         Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem})
         Me.MenuStrip.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip.Name = "MenuStrip"
-        Me.MenuStrip.Padding = New System.Windows.Forms.Padding(8, 2, 0, 2)
-        Me.MenuStrip.Size = New System.Drawing.Size(1009, 28)
+        Me.MenuStrip.Size = New System.Drawing.Size(757, 24)
         Me.MenuStrip.TabIndex = 3
         Me.MenuStrip.Text = "MenuStrip1"
         '
@@ -128,26 +126,26 @@ Partial Class Main
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(44, 24)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(120, 26)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'EditToolStripMenuItem
         '
         Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem})
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
-        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(47, 24)
+        Me.EditToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
         Me.EditToolStripMenuItem.Text = "Edit"
         '
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(137, 26)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'OpenFileDialog
@@ -159,10 +157,10 @@ Partial Class Main
         '
         Me.VScrollBar.Dock = System.Windows.Forms.DockStyle.Right
         Me.VScrollBar.LargeChange = 1
-        Me.VScrollBar.Location = New System.Drawing.Point(822, 28)
+        Me.VScrollBar.Location = New System.Drawing.Point(611, 24)
         Me.VScrollBar.Maximum = 0
         Me.VScrollBar.Name = "VScrollBar"
-        Me.VScrollBar.Size = New System.Drawing.Size(20, 543)
+        Me.VScrollBar.Size = New System.Drawing.Size(20, 438)
         Me.VScrollBar.TabIndex = 6
         '
         'ToolTip
@@ -173,28 +171,27 @@ Partial Class Main
         '
         Me.StatusStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel_Scale, Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel_LogFile})
-        Me.StatusStrip.Location = New System.Drawing.Point(0, 571)
+        Me.StatusStrip.Location = New System.Drawing.Point(0, 462)
         Me.StatusStrip.Name = "StatusStrip"
-        Me.StatusStrip.Padding = New System.Windows.Forms.Padding(1, 0, 19, 0)
-        Me.StatusStrip.Size = New System.Drawing.Size(1009, 25)
+        Me.StatusStrip.Size = New System.Drawing.Size(757, 22)
         Me.StatusStrip.TabIndex = 26
         '
         'ToolStripStatusLabel_Scale
         '
         Me.ToolStripStatusLabel_Scale.Name = "ToolStripStatusLabel_Scale"
-        Me.ToolStripStatusLabel_Scale.Size = New System.Drawing.Size(371, 20)
+        Me.ToolStripStatusLabel_Scale.Size = New System.Drawing.Size(292, 17)
         Me.ToolStripStatusLabel_Scale.Text = "Window Size: NaN, Grid Size: NaN, Selection Size: NaN"
         '
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(499, 20)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(388, 17)
         Me.ToolStripStatusLabel1.Spring = True
         '
         'ToolStripStatusLabel_LogFile
         '
         Me.ToolStripStatusLabel_LogFile.Name = "ToolStripStatusLabel_LogFile"
-        Me.ToolStripStatusLabel_LogFile.Size = New System.Drawing.Size(80, 20)
+        Me.ToolStripStatusLabel_LogFile.Size = New System.Drawing.Size(62, 17)
         Me.ToolStripStatusLabel_LogFile.Text = "No log file"
         '
         'Timer_ChartUpdate
@@ -210,29 +207,33 @@ Partial Class Main
         '
         Me.Label_Series.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label_Series.AutoSize = True
-        Me.Label_Series.Location = New System.Drawing.Point(921, 14)
-        Me.Label_Series.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label_Series.Location = New System.Drawing.Point(691, 11)
         Me.Label_Series.Name = "Label_Series"
-        Me.Label_Series.Size = New System.Drawing.Size(86, 17)
+        Me.Label_Series.Size = New System.Drawing.Size(66, 13)
         Me.Label_Series.TabIndex = 27
         Me.Label_Series.Text = "Show Series"
         '
         'Label_Breakpoint
         '
         Me.Label_Breakpoint.AutoSize = True
-        Me.Label_Breakpoint.Location = New System.Drawing.Point(684, 10)
-        Me.Label_Breakpoint.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label_Breakpoint.Location = New System.Drawing.Point(513, 8)
         Me.Label_Breakpoint.Name = "Label_Breakpoint"
-        Me.Label_Breakpoint.Size = New System.Drawing.Size(45, 17)
+        Me.Label_Breakpoint.Size = New System.Drawing.Size(35, 13)
         Me.Label_Breakpoint.TabIndex = 28
         Me.Label_Breakpoint.Text = "Break"
         Me.Label_Breakpoint.Visible = False
         '
+        'HideAnnotationsToolStripMenuItem
+        '
+        Me.HideAnnotationsToolStripMenuItem.Name = "HideAnnotationsToolStripMenuItem"
+        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
+        '
         'Main
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1009, 596)
+        Me.ClientSize = New System.Drawing.Size(757, 484)
         Me.Controls.Add(Me.Label_Breakpoint)
         Me.Controls.Add(Me.Chart)
         Me.Controls.Add(Me.VScrollBar)
@@ -242,7 +243,6 @@ Partial Class Main
         Me.Controls.Add(Me.MenuStrip)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Main"
         Me.Text = "UoP Racing - Log Analyzer"
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).EndInit()
@@ -280,4 +280,5 @@ Partial Class Main
     Friend WithEvents HideLegendsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel_LogFile As ToolStripStatusLabel
+    Friend WithEvents HideAnnotationsToolStripMenuItem As ToolStripMenuItem
 End Class
