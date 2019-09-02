@@ -4,7 +4,7 @@ Public Class Main
 
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Open a test log file just for testing
-        OpenLogFile("C:\Users\Manos\Desktop\log.txt")
+        'OpenLogFile("C:\Users\Manos\Desktop\log.txt")
     End Sub
 
 #Region "Helper"
@@ -519,19 +519,21 @@ Public Class Main
     Private Sub UpdateScales()
 
         ' ScaleSize is measured in seconds
+        ToolStripStatusLabel_Scale.Text = "Window Size: "
         If ScaleSize < 1 Then
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize * 1000.0).ToString("F") & " msec, "
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize * 1000.0).ToString("F") & " msec, "
         ElseIf ScaleSize > 60 Then
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize / 60.0).ToString("F1") & " min, "
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize / 60.0).ToString("F1") & " min, "
         Else
-            ToolStripStatusLabel_Scale.Text = "Scale Size: " & (ScaleSize).ToString("F1") & " sec, "
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize).ToString("F1") & " sec, "
         End If
+        ToolStripStatusLabel_Scale.Text &= "Grid Size: "
         If (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) < 1 Then
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids * 1000.0).ToString("F") & " msec"
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids * 1000.0).ToString("F") & " msec"
         ElseIf (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 60 Then
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60.0).ToString("F1") & " min"
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60.0).ToString("F1") & " min"
         Else
-            ToolStripStatusLabel_Scale.Text &= "Grid Size: " & (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F1") & " sec"
+            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F1") & " sec"
         End If
 
         If Chart.ChartAreas.Count > 0 Then
@@ -539,7 +541,7 @@ Public Class Main
             If SelectionLength = TimeSpan.Zero Then
                 Exit Sub
             End If
-            ToolStripStatusLabel_Scale.Text &= ", Selection Length: "
+            ToolStripStatusLabel_Scale.Text &= ", Selection Size: "
             If SelectionLength.TotalSeconds > 60 Then
                 ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMinutes.ToString("F1") & " min"
             ElseIf SelectionLength.TotalSeconds < 1 Then
