@@ -31,6 +31,9 @@ Partial Class Main
         Me.ZoomToSelectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.HideLegendsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HideAnnotationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EditAreasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckedListBox = New System.Windows.Forms.CheckedListBox()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -48,7 +51,9 @@ Partial Class Main
         Me.Timer_SeriesHide = New System.Windows.Forms.Timer(Me.components)
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
-        Me.HideAnnotationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -69,37 +74,54 @@ Partial Class Main
         'ContextMenuStrip_Chart
         '
         Me.ContextMenuStrip_Chart.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem})
+        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.EditAreasToolStripMenuItem})
         Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
-        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(181, 126)
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(173, 132)
         '
         'ResetScaleToolStripMenuItem
         '
         Me.ResetScaleToolStripMenuItem.Name = "ResetScaleToolStripMenuItem"
-        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.ResetScaleToolStripMenuItem.Text = "Reset Scale"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(169, 6)
         '
         'ZoomToSelectionToolStripMenuItem
         '
         Me.ZoomToSelectionToolStripMenuItem.Name = "ZoomToSelectionToolStripMenuItem"
-        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.ZoomToSelectionToolStripMenuItem.Text = "Zoom To Selection"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(169, 6)
         '
         'HideLegendsToolStripMenuItem
         '
         Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
-        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
         Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
+        '
+        'HideAnnotationsToolStripMenuItem
+        '
+        Me.HideAnnotationsToolStripMenuItem.Name = "HideAnnotationsToolStripMenuItem"
+        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(169, 6)
+        '
+        'EditAreasToolStripMenuItem
+        '
+        Me.EditAreasToolStripMenuItem.Name = "EditAreasToolStripMenuItem"
+        Me.EditAreasToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.EditAreasToolStripMenuItem.Text = "Edit Areas"
         '
         'CheckedListBox
         '
@@ -115,7 +137,7 @@ Partial Class Main
         'MenuStrip
         '
         Me.MenuStrip.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem})
+        Me.MenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip.Name = "MenuStrip"
         Me.MenuStrip.Size = New System.Drawing.Size(757, 24)
@@ -145,7 +167,7 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'OpenFileDialog
@@ -223,11 +245,24 @@ Partial Class Main
         Me.Label_Breakpoint.Text = "Break"
         Me.Label_Breakpoint.Visible = False
         '
-        'HideAnnotationsToolStripMenuItem
+        'HelpToolStripMenuItem
         '
-        Me.HideAnnotationsToolStripMenuItem.Name = "HideAnnotationsToolStripMenuItem"
-        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReportToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'ReportToolStripMenuItem
+        '
+        Me.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem"
+        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ReportToolStripMenuItem.Text = "Report"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AboutToolStripMenuItem.Text = "About"
         '
         'Main
         '
@@ -281,4 +316,9 @@ Partial Class Main
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel_LogFile As ToolStripStatusLabel
     Friend WithEvents HideAnnotationsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents EditAreasToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ReportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
 End Class

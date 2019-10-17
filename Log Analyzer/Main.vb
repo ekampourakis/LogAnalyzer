@@ -2,6 +2,8 @@
 
 Public Class Main
 
+    Private Slack As New SlackClient("https://hooks.slack.com/services/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")
+
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Open a test log file just for testing
         'OpenLogFile("C:\Users\Manos\Desktop\log.txt")
@@ -761,6 +763,26 @@ Public Class Main
             ToolTip.Active = True
             HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
         End If
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
+        Chart.Series(1).ChartArea = Chart.ChartAreas(0).Name
+    End Sub
+
+    Private Sub EditAreasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditAreasToolStripMenuItem.Click
+        AreaEditor.Show()
+    End Sub
+
+    Private Sub ReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportToolStripMenuItem.Click
+        Dim _Report As New Report
+        _Report.ShowDialog()
+        _Report.Dispose()
+    End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        Dim Splash As New AboutBox
+        Splash.ShowDialog()
+        Splash.Dispose()
     End Sub
 
 #End Region
