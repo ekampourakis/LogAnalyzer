@@ -95,6 +95,8 @@
         My.Settings.Save()
         _ValueChanged = False
         Button_Save.Enabled = False
+
+        Main.SettingsUpdated()
     End Sub
 
 End Class

@@ -2,7 +2,7 @@
 
 Public Class Main
 
-    Private Slack As New SlackClient("https://hooks.slack.com/services/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")
+    Private Log As New Logger(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\UoP Racing\Log Analyzer\", ".txt", "LogAnalyzer")
 
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Open a test log file just for testing
@@ -82,6 +82,7 @@ Public Class Main
         LogFileLength = (MaxTime - MinTime) / 1000.0
         MaxScaleSize = LogFileLength
         ScaleSize = MaxScaleSize
+        CheckedListBox.Items.Clear()
         CheckedListBox.Items.AddRange(LogHeaders)
         ' Remove the time element
         CheckedListBox.Items.RemoveAt(0)
@@ -186,92 +187,101 @@ Public Class Main
     End Sub
 
     Private Sub UpdateChart()
+        Try
 
-        ClearCharts()
+            ClearCharts()
 
-        Dim Areas As Integer = LimitChartAreas()
-        ' Scroll the chart areas to display the maximum chart areas only
-        Dim Areas_Index As Integer = ChartScrollIndex
+            ' Only allow a maximum number of chart areas
+            Dim Areas As Integer = LimitChartAreas()
+            ' Scroll the chart areas to display the maximum chart areas only
+            Dim Areas_Index As Integer = ChartScrollIndex
 
-        SetChartTime()
+            ' Set the X-axis vaues depending on whether the log file has datetime information
+            SetChartTime()
 
+            ' For each requested chart
+            For Index As Integer = 1 To CheckedListBox.Items.Count
+                ' If the series is selected
+                If CheckedListBox.GetItemChecked(Index - 1) Then
 
-        ' For each requested chart
-        For Index As Integer = 1 To CheckedListBox.Items.Count
-            If CheckedListBox.GetItemChecked(Index - 1) Then
+                    ' Create the new chart area
+                    Dim Area As New ChartArea
+                    Area.Name = "ChartArea_" & LogHeaders(Index)
+                    ' Position based on the maximum areas and scroll
+                    Area.Position = New ElementPosition(0, Areas_Index * 100 / Areas, 100, 100 / Areas)
+                    Areas_Index += 1
+                    Area.AlignmentOrientation = AreaAlignmentOrientations.Vertical
+                    ' Align with the last area
+                    If Chart.ChartAreas.Count > 0 Then Area.AlignWithChartArea = Chart.ChartAreas(Chart.ChartAreas.Count - 1).Name
+                    If Chart.ChartAreas.Count = 2 Then Chart.ChartAreas(0).AlignWithChartArea = Chart.ChartAreas(1).Name
+                    ' Add the new chart area to the chart control
+                    Chart.ChartAreas.Add(Area)
 
-                ' Create the new chart area
-                Dim Area As New ChartArea
-                Area.Name = "ChartArea_" & LogHeaders(Index)
-                ' Position based on the maximum areas and scroll
-                Area.Position = New ElementPosition(0, Areas_Index * 100 / Areas, 100, 100 / Areas)
-                Areas_Index += 1
-                Area.AlignmentOrientation = AreaAlignmentOrientations.Vertical
-                ' Align with the last area
-                If Chart.ChartAreas.Count > 0 Then Area.AlignWithChartArea = Chart.ChartAreas(Chart.ChartAreas.Count - 1).Name
-                If Chart.ChartAreas.Count = 2 Then Chart.ChartAreas(0).AlignWithChartArea = Chart.ChartAreas(1).Name
-                Chart.ChartAreas.Add(Area)
+                    ' Create the legend for the area
+                    Dim Legend As New Legend
+                    Legend.Name = "Legend_" & LogHeaders(Index)
+                    Legend.DockedToChartArea = Area.Name
+                    Legend.Docking = Docking.Top
+                    Legend.IsEquallySpacedItems = True
+                    Legend.LegendStyle = LegendStyle.Column
+                    Chart.Legends.Add(Legend)
+                    Legend.Enabled = True
 
-                ' Create the legend for the area
-                Dim Legend As New Legend
-                Legend.Name = "Legend_" & LogHeaders(Index)
-                Legend.DockedToChartArea = Area.Name
-                Legend.Docking = Docking.Top
-                Legend.IsEquallySpacedItems = True
-                Legend.LegendStyle = LegendStyle.Column
-                Chart.Legends.Add(Legend)
-                Legend.Enabled = True
+                    ' Create the series for the new area
+                    Dim Series As New Series
+                    Series.Name = "Series_" & LogHeaders(Index)
+                    ' Associate the series with the area and the legend
+                    Series.ChartArea = Area.Name
+                    Series.Legend = Legend.Name
+                    ' Include the MIN and MAX values to the legend
+                    Series.LegendText = LogHeaders(Index) & " Min: #MIN{D0}, Max: #MAX{D0}"
+                    Series.ChartType = My.Settings.Chart_Series_Type 'SeriesChartType.FastPoint
+                    Series.XValueType = ChartValueType.DateTime
+                    Series.BorderWidth = 3
+                    ' Set the Y-axis value properties
+                    Series.YValueType = ChartValueType.Auto
+                    Series.YAxisType = AxisType.Primary
+                    Chart.Series.Add(Series)
 
-                ' Create the series for the area
-                Dim Series As New Series
-                Series.Name = "Series_" & LogHeaders(Index)
-                ' Associate the series with the area and the legend
-                Series.ChartArea = Area.Name
-                Series.Legend = Legend.Name
-                ' Include the MIN and MAX values to the legend
-                Series.LegendText = LogHeaders(Index) & " Min: #MIN{D0}, Max: #MAX{D0}"
-                Series.ChartType = My.Settings.Chart_Series_Type 'SeriesChartType.FastPoint
-                Series.XValueType = ChartValueType.DateTime
-                Series.BorderWidth = 3
-                Series.YValueType = ChartValueType.Auto
-                Series.YAxisType = AxisType.Primary
-                Chart.Series.Add(Series)
+                    ' Add the first point manually
+                    Dim Line As String() = LogFile(1).Split(LogDelimiter)
+                    Dim Millis As Integer = Line(0)
+                    Dim LastValue As Double = CDbl(Line(Index))
+                    Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                    Dim Avoided As Integer = 0
+                    ' Maximum points to be ignored at once
+                    Dim MaxAvoided As Integer = 100
 
-                ' Add the first point manually
-                Dim Line As String() = LogFile(1).Split(LogDelimiter)
-                Dim Millis As Integer = Line(0)
-                Dim LastValue As Double = CDbl(Line(Index))
-                Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
-                Dim Avoided As Integer = 0
-                ' Maximum points to be ignored at once
-                Dim MaxAvoided As Integer = 100
-
-                ' Fill the series with the data points from the log file while 
-                ' avoiding adding points with the same value as their previous one
-                For Index2 As Integer = 2 To LogFile.Count - 1
-                    Line = LogFile(Index2).Split(LogDelimiter)
-                    Millis = Line(0)
-                    If CDbl(Line(Index)) <> LastValue Or Index2 = LogFile.Count - 1 Then
-                        LastValue = CDbl(Line(Index))
-                        Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
-                    Else
-                        Avoided += 1
-                        If Avoided = MaxAvoided Then
-                            LastValue = Double.MinValue
+                    ' Fill the series with the data points from the log file while 
+                    ' avoiding adding points with the same value as their previous one
+                    For Index2 As Integer = 2 To LogFile.Count - 1
+                        Line = LogFile(Index2).Split(LogDelimiter)
+                        Millis = Line(0)
+                        If CDbl(Line(Index)) <> LastValue Or Index2 = LogFile.Count - 1 Then
+                            LastValue = CDbl(Line(Index))
+                            Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                        Else
+                            Avoided += 1
+                            If Avoided = MaxAvoided Then
+                                LastValue = Double.MinValue
+                            End If
                         End If
-                    End If
-                Next
-                ' Scroll and zoom the area to fit all the points
-                'Area.AxisX.ScaleView.Position = ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate
-                'Area.AxisX.ScaleView.Size = LogFileLength
-                SetChartArea(Area)
-                ChartResetScale = Area.AxisX.ScaleView
+                    Next
+                    ' Scroll and zoom the area to fit all the points
+                    'Area.AxisX.ScaleView.Position = ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate
+                    'Area.AxisX.ScaleView.Size = LogFileLength
+                    SetChartArea(Area)
+                    ChartResetScale = Area.AxisX.ScaleView
 
-                UpdateScales()
-            End If
-        Next
+                    UpdateScales()
+                End If
+            Next
 
-        AutoScaleY()
+            AutoScaleY()
+
+        Catch ex As Exception
+            Log.Write(ex.Message & vbNewLine)
+        End Try
     End Sub
 
 #End Region
@@ -555,6 +565,10 @@ Public Class Main
 
     End Sub
 
+    Public Sub SettingsUpdated()
+        UpdateChart()
+    End Sub
+
 #End Region
 
 #Region "Chart Gestures"
@@ -608,7 +622,7 @@ Public Class Main
                 ' Draw the cursor
                 Try
                     Area.CursorX.SetCursorPixelPosition(e.Location, True)
-                    Area.CursorY.SetCursorPixelPosition(e.Location, True)
+                    'Area.CursorY.SetCursorPixelPosition(e.Location, True)
                 Catch ex As Exception
                     Continue For
                 End Try
@@ -710,6 +724,18 @@ Public Class Main
         Settings.Show()
     End Sub
 
+    Private Sub ReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportToolStripMenuItem.Click
+        Dim _Report As New Report
+        _Report.ShowDialog()
+        _Report.Dispose()
+    End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        Dim Splash As New AboutBox
+        Splash.ShowDialog()
+        Splash.Dispose()
+    End Sub
+
 #End Region
 
 #Region "Debug"
@@ -773,20 +799,10 @@ Public Class Main
         AreaEditor.Show()
     End Sub
 
-    Private Sub ReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReportToolStripMenuItem.Click
-        Dim _Report As New Report
-        _Report.ShowDialog()
-        _Report.Dispose()
-    End Sub
-
-    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
-        Dim Splash As New AboutBox
-        Splash.ShowDialog()
-        Splash.Dispose()
-    End Sub
-
 #End Region
 
+    Private Sub Test()
 
+    End Sub
 
 End Class
