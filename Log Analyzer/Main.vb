@@ -31,6 +31,7 @@ Public Class Main
 
 #Region "Log Opening"
 
+    Dim LogPath As String
     Dim LogFile As String()
     Dim LogHeaders As String()
     Dim LogFileLength As Integer = 0
@@ -46,6 +47,7 @@ Public Class Main
     Private Sub OpenLogFile(ByVal Path As String)
         ' Open the file
         If Not IO.File.Exists(Path) Then Exit Sub
+        LogPath = Path
         LogFile = IO.File.ReadAllLines(Path)
         ' Load the file into the structures
         If Not LogFile(0).Contains(LogDelimiter) Then LogDelimiter = SecondLogDelimiter
@@ -53,11 +55,14 @@ Public Class Main
         ' Recognize and load the log
         If LogHeaders(0) = "vtime" Then
             LogType = LogFileType.UoP6e
-            LoadLogFile_6()
-            'MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
+            If Not LoadLogFile_6() Then
+                Exit Sub
+            End If
+            MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
         ElseIf LogHeaders(0) = "DT" Then
             LogType = LogFileType.UoP7e
             LoadLogFile_7()
+            MsgBox("Generic log files are not supported yet.")
         Else
             MsgBox("Generic log files are not supported yet.")
             Exit Sub
@@ -67,13 +72,53 @@ Public Class Main
         ToolStripStatusLabel_LogFile.Text = Path
     End Sub
 
-    Private Sub LoadLogFile_6()
+    Private Sub SplitLogFile()
+        Dim RunIndex As Integer = 0
+        Dim Path As String = IO.Path.GetDirectoryName(LogPath) & "\"
+        Dim Name As String = IO.Path.GetFileNameWithoutExtension(LogPath)
+        Dim Writer As IO.StreamWriter
+        Dim LastMillis As Integer = 0
+        Dim HeaderIndex As Integer = 0
+        Dim RemovedLines As Integer = 0
+        For Index As Integer = 0 To LogFile.Count - 1
+            If LogFile(Index).StartsWith("vtime") Then
+                RunIndex += 1
+                HeaderIndex = Index
+                If RunIndex > 1 Then
+                    Writer.Close()
+                    Writer.Dispose()
+                End If
+                Writer = New IO.StreamWriter(Path & Name & "_Run" & RunIndex & ".txt")
+                Writer.WriteLine(LogFile(Index))
+                LastMillis = 0
+            Else
+                Dim Line As String() = LogFile(Index).Split(LogDelimiter)
+                If Line.Count = LogFile(HeaderIndex).Split(LogDelimiter).Count() And Line(0) > LastMillis Then
+                    LastMillis = Line(0)
+                    Writer.WriteLine(LogFile(Index))
+                Else
+                    RemovedLines += 1
+                End If
+            End If
+        Next
+        MsgBox("Successfully extracted " & RunIndex & " runs from the log file and removed " & RemovedLines & " corrupted lines.", MsgBoxStyle.Information, "Success")
+        Writer.Close()
+        Writer.Dispose()
+    End Sub
+
+    Private Function LoadLogFile_6() As Boolean
         ' Iterate the whole log file and stop if another instance is found
+        ' FIXME: Useless iteration now that split log file is implemented
         Dim StopIndex As Integer = LogFile.Count - 1
         For Index As Integer = 1 To LogFile.Count - 1
             If LogFile(Index).StartsWith("vtime") Then
                 StopIndex = Index - 1
-                Exit For
+                Dim result As DialogResult = MessageBox.Show("The selected log file seems to be containing more than just one run. This file format is not support by this version of the application. The application can although split the log file to multiple files based on their runs. Do you want to split the log file to try to correct this error?", "Error", MessageBoxButtons.OKCancel)
+                If result = DialogResult.OK Then
+                    SplitLogFile()
+                    MsgBox("Please try to open the *NEW* log files. If the error persists contact your application maintainer.", MsgBoxStyle.Exclamation, "Warning")
+                End If
+                Return False
             End If
         Next
         Dim CutLogFile(StopIndex) As String
@@ -81,6 +126,7 @@ Public Class Main
             CutLogFile(Index) = LogFile(Index)
         Next
         LogFile = CutLogFile
+        ' FIXME: These will need to be searched and not statically acquired
         MinTime = LogFile(1).Split(LogDelimiter)(0)
         MaxTime = LogFile(LogFile.Count - 1).Split(LogDelimiter)(0)
         LogFileLength = (MaxTime - MinTime) / 1000.0
@@ -96,7 +142,8 @@ Public Class Main
         Next
 
         ClearCharts()
-    End Sub
+        Return True
+    End Function
 
     Private Sub LoadLogFile_7()
 
@@ -258,9 +305,19 @@ Public Class Main
 
                     ' Fill the series with the data points from the log file while 
                     ' avoiding adding points with the same value as their previous one
+                    Dim LastMillis As Integer = Millis
                     For Index2 As Integer = 2 To LogFile.Count - 1
                         Line = LogFile(Index2).Split(LogDelimiter)
                         Millis = Line(0)
+                        If Millis < LastMillis Then
+                            Dim result As DialogResult = MessageBox.Show("The selected log file seems to be corrupted. Line " & Index2 + 1 & " seems to be jumping back in time. The application can continue by skipping this line but some features may not work correctly. Do you want to continue?", "Warning", MessageBoxButtons.OKCancel)
+                            If result = DialogResult.OK Then
+                                Continue For
+                            ElseIf result = DialogResult.Cancel Then
+                                ClearCharts()
+                                Exit Sub
+                            End If
+                        End If
                         If CDbl(Line(Index)) <> LastValue Or Index2 = LogFile.Count - 1 Then
                             LastValue = CDbl(Line(Index))
                             Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
@@ -270,6 +327,7 @@ Public Class Main
                                 LastValue = Double.MinValue
                             End If
                         End If
+                        LastMillis = Millis
                     Next
                     ' Scroll and zoom the area to fit all the points
                     'Area.AxisX.ScaleView.Position = ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate
@@ -713,8 +771,8 @@ Public Class Main
 
     Private Sub Timer_ChartUpdate_Tick(sender As Object, e As EventArgs) Handles Timer_ChartUpdate.Tick
         ' Update the charts and stop the timer
-        UpdateChart()
         Timer_ChartUpdate.Stop()
+        UpdateChart()
     End Sub
 
 #End Region
