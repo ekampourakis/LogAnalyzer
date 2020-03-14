@@ -14,7 +14,11 @@
         Dim _Payload As New Payload
         _Payload.Channel = "general"
         _Payload.Username = "ekampourakis"
-        _Payload.Text = "New bug report from " & TextBox_BugName.Text & vbNewLine & vbNewLine
+
+        _Payload.Text = "New bug report from " & TextBox_BugName.Text & " for version "
+        With My.Application.Info.Version
+            _Payload.Text &= "V" & .Major & "." & .Minor & "." & .Build & "." & .Revision & vbNewLine & vbNewLine
+        End With
         _Payload.Text &= "Bug Summary: " & TextBox_BugSummary.Text & vbNewLine & vbNewLine
         _Payload.Text &= "Bug Description: " & TextBox_BugDescription.Text
         Slack.PostMessage(_Payload)
@@ -33,7 +37,10 @@
         Dim _Payload As New Payload
         _Payload.Channel = "general"
         _Payload.Username = "ekampourakis"
-        _Payload.Text = "New feature suggestion from " & TextBox_FeatureName.Text & vbNewLine & vbNewLine
+        _Payload.Text = "New feature suggestion from " & TextBox_FeatureName.Text & " for version "
+        With My.Application.Info.Version
+            _Payload.Text &= "V" & .Major & "." & .Minor & "." & .Build & "." & .Revision & vbNewLine & vbNewLine
+        End With
         _Payload.Text &= "Feature Summary: " & TextBox_FeatureSummary.Text & vbNewLine & vbNewLine
         _Payload.Text &= "Feature Description: " & TextBox_FeatureDescription.Text
         Slack.PostMessage(_Payload)

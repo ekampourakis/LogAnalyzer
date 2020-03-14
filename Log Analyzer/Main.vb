@@ -7,6 +7,10 @@ Public Class Main
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Open a test log file just for testing
         'OpenLogFile("C:\Users\Manos\Desktop\log.txt")
+        'With My.Application.Info.Version
+        '    MsgBox("V" & .Major & "." & .Minor & "." & .Build & "." & .Revision)
+        'End With
+
     End Sub
 
 #Region "Helper"
@@ -623,6 +627,7 @@ Public Class Main
                 Try
                     Area.CursorX.SetCursorPixelPosition(e.Location, True)
                     'Area.CursorY.SetCursorPixelPosition(e.Location, True)
+                    CursorPosition = e.Location
                 Catch ex As Exception
                     Continue For
                 End Try
@@ -804,5 +809,36 @@ Public Class Main
     Private Sub Test()
 
     End Sub
+
+    Dim CursorPosition As Point
+
+    Private Sub Chart_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+
+        Select Case e.KeyCode
+            Case Keys.Left
+
+                CursorPosition.X -= 1
+                If CursorPosition.X < 0 Then
+                    CursorPosition.X = 0
+                End If
+
+                For Each Area As ChartArea In Chart.ChartAreas
+                    Try
+                        Area.CursorX.SetCursorPixelPosition(CursorPosition, True)
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+
+                Next
+
+            Case Keys.Right
+
+            Case Keys.Up
+
+            Case Keys.Down
+
+        End Select
+    End Sub
+
 
 End Class

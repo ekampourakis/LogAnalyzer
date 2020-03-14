@@ -22,6 +22,7 @@ Public Class SlackClient
 
     Public Sub New(ByVal urlWithAccessToken As String)
         _uri = New Uri(urlWithAccessToken)
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
     End Sub
 
     Public Sub PostMessage(ByVal text As String, ByVal Optional username As String = Nothing, ByVal Optional channel As String = Nothing)
