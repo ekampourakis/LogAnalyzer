@@ -136,6 +136,9 @@ Public Class Main
                 MsgBox("Generic log files are not supported yet.")
                 Exit Sub
         End Select
+        If PictureBox_LoadLog.Visible Then
+            PictureBox_LoadLog.Visible = False
+        End If
     End Sub
 
     Private Sub SplitLogFile()
@@ -842,6 +845,10 @@ Public Class Main
         OpenFileDialog.ShowDialog()
     End Sub
 
+    Private Sub PictureBox_LoadLog_Click(sender As Object, e As EventArgs) Handles PictureBox_LoadLog.Click
+        OpenFileDialog.ShowDialog()
+    End Sub
+
     Private Sub SettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingsToolStripMenuItem.Click
         Settings.Show()
     End Sub
@@ -956,6 +963,5 @@ Public Class Main
 
         End Select
     End Sub
-
 
 End Class

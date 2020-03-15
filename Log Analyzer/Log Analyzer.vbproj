@@ -173,6 +173,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\UoP Racing Logo.ico" />
+    <None Include="Resources\open_file.png" />
     <Content Include="UoP Racing Logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

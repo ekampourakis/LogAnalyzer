@@ -54,10 +54,12 @@ Partial Class Main
         Me.Timer_SeriesHide = New System.Windows.Forms.Timer(Me.components)
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
+        Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
         Me.StatusStrip.SuspendLayout()
+        CType(Me.PictureBox_LoadLog, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Chart
@@ -76,51 +78,51 @@ Partial Class Main
         Me.ContextMenuStrip_Chart.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.EditAreasToolStripMenuItem})
         Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
-        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(173, 132)
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(174, 132)
         '
         'ResetScaleToolStripMenuItem
         '
         Me.ResetScaleToolStripMenuItem.Name = "ResetScaleToolStripMenuItem"
-        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.ResetScaleToolStripMenuItem.Text = "Reset Scale"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(169, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
         '
         'ZoomToSelectionToolStripMenuItem
         '
         Me.ZoomToSelectionToolStripMenuItem.Name = "ZoomToSelectionToolStripMenuItem"
-        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.ZoomToSelectionToolStripMenuItem.Text = "Zoom To Selection"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(169, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(170, 6)
         '
         'HideLegendsToolStripMenuItem
         '
         Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
-        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
         '
         'HideAnnotationsToolStripMenuItem
         '
         Me.HideAnnotationsToolStripMenuItem.Name = "HideAnnotationsToolStripMenuItem"
-        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(169, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(170, 6)
         '
         'EditAreasToolStripMenuItem
         '
         Me.EditAreasToolStripMenuItem.Name = "EditAreasToolStripMenuItem"
-        Me.EditAreasToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.EditAreasToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
         Me.EditAreasToolStripMenuItem.Text = "Edit Areas"
         '
         'CheckedListBox
@@ -264,11 +266,24 @@ Partial Class Main
         Me.Label_Breakpoint.Text = "Break"
         Me.Label_Breakpoint.Visible = False
         '
+        'PictureBox_LoadLog
+        '
+        Me.PictureBox_LoadLog.BackColor = System.Drawing.Color.White
+        Me.PictureBox_LoadLog.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox_LoadLog.Image = Global.Log_Analyzer.My.Resources.Resources.open_file
+        Me.PictureBox_LoadLog.Location = New System.Drawing.Point(0, 24)
+        Me.PictureBox_LoadLog.Name = "PictureBox_LoadLog"
+        Me.PictureBox_LoadLog.Size = New System.Drawing.Size(611, 438)
+        Me.PictureBox_LoadLog.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox_LoadLog.TabIndex = 29
+        Me.PictureBox_LoadLog.TabStop = False
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(757, 484)
+        Me.Controls.Add(Me.PictureBox_LoadLog)
         Me.Controls.Add(Me.Label_Breakpoint)
         Me.Controls.Add(Me.Chart)
         Me.Controls.Add(Me.VScrollBar)
@@ -287,6 +302,7 @@ Partial Class Main
         Me.MenuStrip.PerformLayout()
         Me.StatusStrip.ResumeLayout(False)
         Me.StatusStrip.PerformLayout()
+        CType(Me.PictureBox_LoadLog, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -322,4 +338,5 @@ Partial Class Main
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents PictureBox_LoadLog As PictureBox
 End Class
