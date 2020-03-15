@@ -2,27 +2,27 @@
 
 #Region "Value Controls"
 
-    Private Sub TrackBar_MaxZoom_Scroll(sender As Object, e As EventArgs) Handles TrackBar_MaxZoom.Scroll, TrackBar_MaxZoom.ValueChanged
+    Private Sub TrackBar_MaxZoom_Scroll(sender As Object, e As EventArgs) Handles TrackBar_MaxZoom.ValueChanged, TrackBar_MaxZoom.Scroll
         Label_MaxZoom.Text = "Maximum Zoom: " & TrackBar_MaxZoom.Value & "ms"
         ValueChanged()
     End Sub
 
-    Private Sub TrackBar_ZoomSteps_Scroll(sender As Object, e As EventArgs) Handles TrackBar_ZoomSteps.Scroll, TrackBar_ZoomSteps.ValueChanged
+    Private Sub TrackBar_ZoomSteps_Scroll(sender As Object, e As EventArgs) Handles TrackBar_ZoomSteps.ValueChanged, TrackBar_ZoomSteps.Scroll
         Label_ZoomSteps.Text = "Zoom Steps: " & TrackBar_ZoomSteps.Value
         ValueChanged()
     End Sub
 
-    Private Sub TrackBar_ScaleInterval_Scroll(sender As Object, e As EventArgs) Handles TrackBar_ScaleInterval.Scroll, TrackBar_ScaleInterval.ValueChanged
+    Private Sub TrackBar_ScaleInterval_Scroll(sender As Object, e As EventArgs) Handles TrackBar_ScaleInterval.ValueChanged, TrackBar_ScaleInterval.Scroll
         Label_ScaleInterval.Text = "Scale Interval: " & TrackBar_ScaleInterval.Value
         ValueChanged()
     End Sub
 
-    Private Sub TrackBar_XGrids_Scroll(sender As Object, e As EventArgs) Handles TrackBar_XGrids.Scroll, TrackBar_XGrids.ValueChanged
+    Private Sub TrackBar_XGrids_Scroll(sender As Object, e As EventArgs) Handles TrackBar_XGrids.ValueChanged, TrackBar_XGrids.Scroll
         Label_XGrids.Text = "X Grids: " & TrackBar_XGrids.Value
         ValueChanged()
     End Sub
 
-    Private Sub TrackBar_MaxAreas_Scroll(sender As Object, e As EventArgs) Handles TrackBar_MaxAreas.Scroll, TrackBar_MaxAreas.ValueChanged
+    Private Sub TrackBar_MaxAreas_Scroll(sender As Object, e As EventArgs) Handles TrackBar_MaxAreas.ValueChanged, TrackBar_MaxAreas.Scroll
         Label_MaxAreas.Text = "Maximum Areas: " & TrackBar_MaxAreas.Value
         ValueChanged()
     End Sub
@@ -39,6 +39,7 @@
         TrackBar_ScaleInterval.Value = My.Settings.Chart_Scale_Interval
         TrackBar_XGrids.Value = My.Settings.Chart_Scale_AxisX_Grids
         TrackBar_MaxAreas.Value = My.Settings.Chart_MaxChartAreas
+        TrackBar_BorderSize.Value = My.Settings.Chart_Border_Size * 10
         If My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastLine Then
             ComboBox_SeriesType.SelectedIndex = 0
         ElseIf My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastPoint Then
@@ -87,6 +88,7 @@
         My.Settings.Chart_Scale_Interval = TrackBar_ScaleInterval.Value
         My.Settings.Chart_Scale_AxisX_Grids = TrackBar_XGrids.Value
         My.Settings.Chart_MaxChartAreas = TrackBar_MaxAreas.Value
+        My.Settings.Chart_Border_Size = TrackBar_BorderSize.Value / 10.0
         If ComboBox_SeriesType.SelectedIndex = 0 Then
             My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastLine
         Else
@@ -99,4 +101,8 @@
         Main.SettingsUpdated()
     End Sub
 
+    Private Sub TrackBar_BorderSize_Scroll(sender As Object, e As EventArgs) Handles TrackBar_BorderSize.Scroll
+        Label_BorderSize.Text = "Border Size: " & TrackBar_BorderSize.Value / 10.0 & " pixels"
+        ValueChanged()
+    End Sub
 End Class

@@ -83,8 +83,13 @@ Public Class Main
         Dim LastMillis As Integer = 0
         Dim CorruptedLines As New List(Of Integer)
         For Index As Integer = 1 To LogFile.Count - 1
-
-            Dim Columns() As String = LogFile(Index).Split(LogDelimiter)
+            Dim Columns As String()
+            Try
+                Columns = LogFile(Index).Split(LogDelimiter)
+            Catch ex As Exception
+                CorruptedLines.Add(Index)
+                Continue For
+            End Try
 
             ' All lines must have equal amount of columns
             If Columns.Count <> LogHeaders.Count Then
@@ -112,6 +117,19 @@ Public Class Main
             End If
 
         Next
+
+        ' Remove corrupted lines
+        Dim NewLogFile(LogFile.Count() - CorruptedLines.Count() - 1) As String
+        Dim Line As Integer = 0
+        For Index As Integer = 0 To LogFile.Count - 1
+            If Index <> CorruptedLines.Item(0) Then
+                NewLogFile(Line) = LogFile(Index)
+                Line += 1
+            Else
+                CorruptedLines.RemoveAt(0)
+            End If
+        Next
+        LogFile = NewLogFile
 
         Return True
     End Function
@@ -286,17 +304,19 @@ Public Class Main
     End Function
 
     Private Sub SetChartTime()
-        ' Set the start point of the X-axis as the current time for the UoP6e
-        Dim Time As New DateTime
-        If LogType = LogFileType.UoP6e Then
-            Time = Now
-        ElseIf LogType = LogFileType.UoP7e Then
-            ' Time = datetime from log file name
-            ' Else pop up to set time
-        Else
-            ' Pop up to set time
-        End If
-        ChartTimeOffset = Time
+        '' Set the start point of the X-axis as the current time for the UoP6e
+        'Dim Time As New DateTime
+        'If LogType = LogFileType.UoP6e Then
+        '    Time = Now
+        'ElseIf LogType = LogFileType.UoP7e Then
+        '    ' Time = datetime from log file name
+        '    ' Else pop up to set time
+        'ElseIf LogType = LogFileType.FSG Then
+        '    Time = Now
+        'Else
+        '    ' Pop up to set time
+        'End If
+        ChartTimeOffset = Now 'Time
     End Sub
 
     Private Sub UpdateChart()
@@ -350,7 +370,7 @@ Public Class Main
                     Series.LegendText = LogHeaders(Index) & " Min: #MIN{D0}, Max: #MAX{D0}"
                     Series.ChartType = My.Settings.Chart_Series_Type 'SeriesChartType.FastPoint
                     Series.XValueType = ChartValueType.DateTime
-                    Series.BorderWidth = 3
+                    Series.BorderWidth = My.Settings.Chart_Border_Size
                     ' Set the Y-axis value properties
                     Series.YValueType = ChartValueType.Auto
                     Series.YAxisType = AxisType.Primary
@@ -964,4 +984,7 @@ Public Class Main
         End Select
     End Sub
 
+    Private Sub DataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataToolStripMenuItem.Click
+
+    End Sub
 End Class

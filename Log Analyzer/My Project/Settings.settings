@@ -23,5 +23,8 @@
     <Setting Name="Chart_Series_Type" Type="System.Windows.Forms.DataVisualization.Charting.SeriesChartType" Scope="User">
       <Value Profile="(Default)">FastPoint</Value>
     </Setting>
+    <Setting Name="Chart_Border_Size" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
