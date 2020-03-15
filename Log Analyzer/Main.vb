@@ -41,6 +41,7 @@ Public Class Main
         UoP6e
         UoP7e
         Generic
+        FSG
     End Enum
     Private LogType As LogFileType = LogFileType.Generic
 
@@ -49,27 +50,92 @@ Public Class Main
         If Not IO.File.Exists(Path) Then Exit Sub
         LogPath = Path
         LogFile = IO.File.ReadAllLines(Path)
-        ' Load the file into the structures
-        If Not LogFile(0).Contains(LogDelimiter) Then LogDelimiter = SecondLogDelimiter
-        LogHeaders = LogFile(0).Replace(" ", "").Split(LogDelimiter)
-        ' Recognize and load the log
-        If LogHeaders(0) = "vtime" Then
-            LogType = LogFileType.UoP6e
-            If Not LoadLogFile_6() Then
-                Exit Sub
-            End If
-            MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
-        ElseIf LogHeaders(0) = "DT" Then
-            LogType = LogFileType.UoP7e
-            LoadLogFile_7()
-            MsgBox("Generic log files are not supported yet.")
-        Else
-            MsgBox("Generic log files are not supported yet.")
+
+        ' Check the validity of the log file
+        If Not CheckLogFile() Then
+            LogPath = ""
+            LogFile = Nothing
             Exit Sub
-            LogType = LogFileType.Generic
-            LoadLogFile_6()
         End If
+
         ToolStripStatusLabel_LogFile.Text = Path
+
+        AnalyzeLogFile()
+    End Sub
+
+    Private Function CheckLogFile() As Boolean
+        ' Log file must contain the headers in the first row
+        If LogFile(0).StartsWith("vtime") Or LogFile(0).StartsWith("vTime") Then
+            ' Headers must be seperated with a valid log delimiter
+            If LogFile(0).Contains(LogDelimiter) Or LogFile(0).Contains(SecondLogDelimiter) Then
+                ' Load the file into the structures
+                If Not LogFile(0).Contains(LogDelimiter) Then LogDelimiter = SecondLogDelimiter
+                LogHeaders = LogFile(0).Replace(" ", "").Split(LogDelimiter)
+            Else
+                MsgBox("The selected file doesn't appear to be a valid log file. Only comma (,) or semicolon (;) seperated data are supported.", MsgBoxStyle.Critical, "Error")
+                Return False
+            End If
+        Else
+            MsgBox("The selected file doesn't appear to be a valid log file. The first line of the file must contain the log headers.", MsgBoxStyle.Critical, "Error")
+            Return False
+        End If
+
+        Dim LastMillis As Integer = 0
+        Dim CorruptedLines As New List(Of Integer)
+        For Index As Integer = 1 To LogFile.Count - 1
+
+            Dim Columns() As String = LogFile(Index).Split(LogDelimiter)
+
+            ' All lines must have equal amount of columns
+            If Columns.Count <> LogHeaders.Count Then
+                ' Corrupted line
+                CorruptedLines.Add(Index)
+                Continue For
+            End If
+
+            ' Multiple runs are fixable in the same log file
+            If LogFile(Index).StartsWith("vtime") Or LogFile(Index).StartsWith("vTime") Then
+                ' Multiple runs
+                Dim result As DialogResult = MessageBox.Show("The selected log file seems to be containing more than just one run. This file format is not support by this version of the application. The application can although split the log file to multiple files based on their runs. Do you want to split the log file to try to correct this error?", "Error", MessageBoxButtons.OKCancel)
+                If result = DialogResult.OK Then
+                    SplitLogFile()
+                    MsgBox("Please try to open the *NEW* log files. If the error persists contact your application maintainer.", MsgBoxStyle.Exclamation, "Warning")
+                End If
+                Return False
+            End If
+
+            ' First column must be in ascending order and in milliseconds
+            If Columns(0) <= LastMillis Then
+                ' Jump back in time
+                MsgBox("An unexpected error occured in the log file. A jump back in time was recognized in line " & Index & ".", MsgBoxStyle.Critical, "Error")
+                Return False
+            End If
+
+        Next
+
+        Return True
+    End Function
+
+    Private Sub AnalyzeLogFile()
+        ' Recognize and load the log
+        Select Case LogHeaders(0)
+            Case "vtime"
+                LogType = LogFileType.UoP6e
+                MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
+                LoadLogFile_6()
+            Case "vTime[s]"
+                LogType = LogFileType.FSG
+                MsgBox("Loaded FSG log file.", MsgBoxStyle.Information, "Success")
+                LoadLogFile_FSG()
+            Case "DT"
+                LogType = LogFileType.UoP7e
+                MsgBox("UoP7e log files are not supported yet.")
+                Exit Sub
+            Case Else
+                LogType = LogFileType.Generic
+                MsgBox("Generic log files are not supported yet.")
+                Exit Sub
+        End Select
     End Sub
 
     Private Sub SplitLogFile()
@@ -81,7 +147,7 @@ Public Class Main
         Dim HeaderIndex As Integer = 0
         Dim RemovedLines As Integer = 0
         For Index As Integer = 0 To LogFile.Count - 1
-            If LogFile(Index).StartsWith("vtime") Then
+            If LogFile(Index).StartsWith("vtime") Or LogFile(Index).StartsWith("vTime") Then
                 RunIndex += 1
                 HeaderIndex = Index
                 If RunIndex > 1 Then
@@ -92,13 +158,15 @@ Public Class Main
                 Writer.WriteLine(LogFile(Index))
                 LastMillis = 0
             Else
-                Dim Line As String() = LogFile(Index).Split(LogDelimiter)
-                If Line.Count = LogFile(HeaderIndex).Split(LogDelimiter).Count() And Line(0) > LastMillis Then
-                    LastMillis = Line(0)
-                    Writer.WriteLine(LogFile(Index))
-                Else
+                Dim Columns() As String = LogFile(Index).Split(LogDelimiter)
+                ' All lines must have equal amount of columns
+                ' First column must be in ascending order and in milliseconds
+                If Columns.Count <> LogHeaders.Count Or Columns(0) <= LastMillis Then
                     RemovedLines += 1
+                    Continue For
                 End If
+                LastMillis = Columns(0)
+                Writer.WriteLine(LogFile(Index))
             End If
         Next
         MsgBox("Successfully extracted " & RunIndex & " runs from the log file and removed " & RemovedLines & " corrupted lines.", MsgBoxStyle.Information, "Success")
@@ -106,26 +174,7 @@ Public Class Main
         Writer.Dispose()
     End Sub
 
-    Private Function LoadLogFile_6() As Boolean
-        ' Iterate the whole log file and stop if another instance is found
-        ' FIXME: Useless iteration now that split log file is implemented
-        Dim StopIndex As Integer = LogFile.Count - 1
-        For Index As Integer = 1 To LogFile.Count - 1
-            If LogFile(Index).StartsWith("vtime") Then
-                StopIndex = Index - 1
-                Dim result As DialogResult = MessageBox.Show("The selected log file seems to be containing more than just one run. This file format is not support by this version of the application. The application can although split the log file to multiple files based on their runs. Do you want to split the log file to try to correct this error?", "Error", MessageBoxButtons.OKCancel)
-                If result = DialogResult.OK Then
-                    SplitLogFile()
-                    MsgBox("Please try to open the *NEW* log files. If the error persists contact your application maintainer.", MsgBoxStyle.Exclamation, "Warning")
-                End If
-                Return False
-            End If
-        Next
-        Dim CutLogFile(StopIndex) As String
-        For Index As Integer = 0 To StopIndex
-            CutLogFile(Index) = LogFile(Index)
-        Next
-        LogFile = CutLogFile
+    Private Sub LoadLogFile()
         ' FIXME: These will need to be searched and not statically acquired
         MinTime = LogFile(1).Split(LogDelimiter)(0)
         MaxTime = LogFile(LogFile.Count - 1).Split(LogDelimiter)(0)
@@ -140,13 +189,23 @@ Public Class Main
         For Index As Integer = 0 To CheckedListBox.Items.Count - 1
             CheckedListBox.SetItemChecked(Index, False)
         Next
-
         ClearCharts()
-        Return True
-    End Function
+    End Sub
+
+    Private Sub LoadLogFile_6()
+        LoadLogFile()
+    End Sub
+
+    Private Sub LoadLogFile_FSG()
+        Dim Offset As Integer = Math.Floor(LogFile(1).Split(LogDelimiter)(0) * 1000)
+        For Index As Integer = 1 To LogFile.Count - 1
+            LogFile(Index) = CInt(CDbl(LogFile(Index).Split(LogDelimiter)(0)) * 1000) - Offset & LogFile(Index).Substring(LogFile(Index).IndexOf(LogDelimiter))
+        Next
+        LoadLogFile()
+    End Sub
 
     Private Sub LoadLogFile_7()
-
+        ' Not yet supported
     End Sub
 
     Private Sub OpenFileDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog.FileOk
