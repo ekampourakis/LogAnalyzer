@@ -1,6 +1,6 @@
 ﻿Public Class Report
 
-    Private Slack As New SlackClient("https://hooks.slack.com/services/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")
+    Private Slack As New SlackClient(SlackToken.Token)
 
     Private Sub SendBugReport()
         For Each Ctrl As Object In GroupBox_BugReport.Controls

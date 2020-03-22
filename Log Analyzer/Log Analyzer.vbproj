@@ -140,6 +140,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SlackClient.vb" />
+    <Compile Include="SlackToken.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AboutBox.resx">
