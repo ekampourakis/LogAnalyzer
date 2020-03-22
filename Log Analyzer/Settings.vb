@@ -45,6 +45,8 @@
         ElseIf My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastPoint Then
             ComboBox_SeriesType.SelectedIndex = 1
         End If
+        CheckBox_LimitCPU.Checked = My.Settings.Chart_LimitCPU
+        CheckBox_ReduceFlicker.Checked = My.Settings.Chart_LimitFlicker
         Button_Save.Enabled = False
         _ValueChanged = False
     End Sub
@@ -94,6 +96,8 @@
         Else
             My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastPoint
         End If
+        My.Settings.Chart_LimitCPU = CheckBox_LimitCPU.Checked
+        My.Settings.Chart_LimitFlicker = CheckBox_ReduceFlicker.Checked
         My.Settings.Save()
         _ValueChanged = False
         Button_Save.Enabled = False
@@ -103,6 +107,14 @@
 
     Private Sub TrackBar_BorderSize_Scroll(sender As Object, e As EventArgs) Handles TrackBar_BorderSize.Scroll
         Label_BorderSize.Text = "Border Size: " & TrackBar_BorderSize.Value / 10.0 & " pixels"
+        ValueChanged()
+    End Sub
+
+    Private Sub CheckBox_LimitCPU_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_LimitCPU.CheckedChanged
+        ValueChanged()
+    End Sub
+
+    Private Sub CheckBox_ReduceFlicker_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ReduceFlicker.CheckedChanged
         ValueChanged()
     End Sub
 End Class

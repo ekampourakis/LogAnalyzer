@@ -149,6 +149,30 @@ Namespace My
                 Me("Chart_Border_Size") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property Chart_LimitCPU() As Boolean
+            Get
+                Return CType(Me("Chart_LimitCPU"),Boolean)
+            End Get
+            Set
+                Me("Chart_LimitCPU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property Chart_LimitFlicker() As Boolean
+            Get
+                Return CType(Me("Chart_LimitFlicker"),Boolean)
+            End Get
+            Set
+                Me("Chart_LimitFlicker") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -40,6 +40,8 @@ Partial Class Settings
         Me.ComboBox_SeriesType = New System.Windows.Forms.ComboBox()
         Me.TrackBar_BorderSize = New System.Windows.Forms.TrackBar()
         Me.Label_BorderSize = New System.Windows.Forms.Label()
+        Me.CheckBox_LimitCPU = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_ReduceFlicker = New System.Windows.Forms.CheckBox()
         CType(Me.TrackBar_ZoomSteps, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_ScaleInterval, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_XGrids, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -216,11 +218,33 @@ Partial Class Settings
         Me.Label_BorderSize.TabIndex = 15
         Me.Label_BorderSize.Text = "Border Size:"
         '
+        'CheckBox_LimitCPU
+        '
+        Me.CheckBox_LimitCPU.AutoSize = True
+        Me.CheckBox_LimitCPU.Location = New System.Drawing.Point(247, 76)
+        Me.CheckBox_LimitCPU.Name = "CheckBox_LimitCPU"
+        Me.CheckBox_LimitCPU.Size = New System.Drawing.Size(214, 17)
+        Me.CheckBox_LimitCPU.TabIndex = 17
+        Me.CheckBox_LimitCPU.Text = "Limit CPU Usage (Reduces refresh rate)"
+        Me.CheckBox_LimitCPU.UseVisualStyleBackColor = True
+        '
+        'CheckBox_ReduceFlicker
+        '
+        Me.CheckBox_ReduceFlicker.AutoSize = True
+        Me.CheckBox_ReduceFlicker.Location = New System.Drawing.Point(247, 99)
+        Me.CheckBox_ReduceFlicker.Name = "CheckBox_ReduceFlicker"
+        Me.CheckBox_ReduceFlicker.Size = New System.Drawing.Size(227, 17)
+        Me.CheckBox_ReduceFlicker.TabIndex = 18
+        Me.CheckBox_ReduceFlicker.Text = "Reduce flicker (Reduces cursor sensitivity)"
+        Me.CheckBox_ReduceFlicker.UseVisualStyleBackColor = True
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(488, 379)
+        Me.Controls.Add(Me.CheckBox_ReduceFlicker)
+        Me.Controls.Add(Me.CheckBox_LimitCPU)
         Me.Controls.Add(Me.TrackBar_BorderSize)
         Me.Controls.Add(Me.Label_BorderSize)
         Me.Controls.Add(Me.ComboBox_SeriesType)
@@ -271,4 +295,6 @@ Partial Class Settings
     Friend WithEvents ComboBox_SeriesType As ComboBox
     Friend WithEvents TrackBar_BorderSize As TrackBar
     Friend WithEvents Label_BorderSize As Label
+    Friend WithEvents CheckBox_LimitCPU As CheckBox
+    Friend WithEvents CheckBox_ReduceFlicker As CheckBox
 End Class

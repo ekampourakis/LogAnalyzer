@@ -727,6 +727,22 @@ AddLine:
     End Sub
 
     Private Sub Chart_MouseMove(sender As Object, e As MouseEventArgs) Handles Chart.MouseMove
+        Static LastFire As DateTime = Now()
+        Dim Interval As Integer = 1000 / If(My.Settings.Chart_LimitCPU, 24, 60)
+
+        ' Limit the frequency of the event to reduce CPU usage
+        If Now.Subtract(LastFire).TotalMilliseconds < Interval Then Exit Sub
+        LastFire = Now()
+
+        ' Limit the minimum cursor movement before triggering to reduce flicker
+        Static LastX = MousePosition.X
+        Static LastY = MousePosition.Y
+        Dim MinimumMove As Integer = If(My.Settings.Chart_LimitFlicker, 3, 1)
+        If Math.Sqrt(Math.Pow(LastX - MousePosition.X, 2) + Math.Pow(LastY - MousePosition.Y, 2))<MinimumMove Then Exit Sub
+        LastX= MousePosition.X
+        LastY= MousePosition.Y
+
+        ' Only execute when there are charts drawn
         If Chart.ChartAreas.Count > 0 Then
 
             Dim Values As String = ""
@@ -744,7 +760,6 @@ AddLine:
                 Else
                     Values &= Length.ToString("F0") & " msec"
                 End If
-
             Else
                 Dim FirstAreaOnly As Boolean = False
                 Dim XValue As Double = -1
@@ -787,7 +802,9 @@ AddLine:
                     Values &= "(" & PointTime & " ms, " & Point.YValues(0) & ")" & vbNewLine
 
                 Next
+
             End If
+
             ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
         End If
     End Sub

@@ -43,6 +43,7 @@ Partial Class Main
         Me.DataToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
         Me.VScrollBar = New System.Windows.Forms.VScrollBar()
@@ -56,7 +57,6 @@ Partial Class Main
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
-        Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -158,7 +158,7 @@ Partial Class Main
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'EditToolStripMenuItem
@@ -171,13 +171,13 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'DataToolStripMenuItem
         '
         Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
-        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.DataToolStripMenuItem.Text = "Data"
         '
         'HelpToolStripMenuItem
@@ -190,13 +190,19 @@ Partial Class Main
         'ReportToolStripMenuItem
         '
         Me.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem"
-        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.ReportToolStripMenuItem.Text = "Report"
+        '
+        'ShowLogToolStripMenuItem
+        '
+        Me.ShowLogToolStripMenuItem.Name = "ShowLogToolStripMenuItem"
+        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
+        Me.ShowLogToolStripMenuItem.Text = "Show Log"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'OpenFileDialog
@@ -274,7 +280,6 @@ Partial Class Main
         Me.Label_Breakpoint.Size = New System.Drawing.Size(35, 13)
         Me.Label_Breakpoint.TabIndex = 28
         Me.Label_Breakpoint.Text = "Break"
-        Me.Label_Breakpoint.Visible = False
         '
         'PictureBox_LoadLog
         '
@@ -287,12 +292,6 @@ Partial Class Main
         Me.PictureBox_LoadLog.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox_LoadLog.TabIndex = 29
         Me.PictureBox_LoadLog.TabStop = False
-        '
-        'ShowLogToolStripMenuItem
-        '
-        Me.ShowLogToolStripMenuItem.Name = "ShowLogToolStripMenuItem"
-        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ShowLogToolStripMenuItem.Text = "Show Log"
         '
         'Main
         '
@@ -307,6 +306,7 @@ Partial Class Main
         Me.Controls.Add(Me.CheckedListBox)
         Me.Controls.Add(Me.StatusStrip)
         Me.Controls.Add(Me.MenuStrip)
+        Me.DoubleBuffered = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
         Me.MainMenuStrip = Me.MenuStrip
