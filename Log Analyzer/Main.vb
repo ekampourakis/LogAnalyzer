@@ -858,10 +858,6 @@ AddLine:
         Splash.Dispose()
     End Sub
 
-    Private Sub ShowLogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowLogToolStripMenuItem.Click
-        If IO.File.Exists(Log.Path) = True Then Process.Start(Log.Path)
-    End Sub
-
 #End Region
 
 #Region "Debug"
@@ -969,5 +965,4 @@ AddLine:
         Log.Write("Ending")
         Log.Close()
     End Sub
-
 End Class

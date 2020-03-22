@@ -56,7 +56,6 @@ Partial Class Main
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
-        Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -158,7 +157,7 @@ Partial Class Main
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'EditToolStripMenuItem
@@ -171,18 +170,18 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'DataToolStripMenuItem
         '
         Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
-        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.DataToolStripMenuItem.Text = "Data"
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReportToolStripMenuItem, Me.ShowLogToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ReportToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
@@ -190,13 +189,13 @@ Partial Class Main
         'ReportToolStripMenuItem
         '
         Me.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem"
-        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(109, 22)
         Me.ReportToolStripMenuItem.Text = "Report"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(109, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'OpenFileDialog
@@ -288,12 +287,6 @@ Partial Class Main
         Me.PictureBox_LoadLog.TabIndex = 29
         Me.PictureBox_LoadLog.TabStop = False
         '
-        'ShowLogToolStripMenuItem
-        '
-        Me.ShowLogToolStripMenuItem.Name = "ShowLogToolStripMenuItem"
-        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.ShowLogToolStripMenuItem.Text = "Show Log"
-        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -356,5 +349,4 @@ Partial Class Main
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PictureBox_LoadLog As PictureBox
     Friend WithEvents DataToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ShowLogToolStripMenuItem As ToolStripMenuItem
 End Class
