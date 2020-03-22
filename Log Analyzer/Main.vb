@@ -2,15 +2,10 @@
 
 Public Class Main
 
-    Private Log As New Logger(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\UoP Racing\Log Analyzer\", ".txt", "LogAnalyzer")
+    Private Log As New Logger(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\UoP Racing\Log Analyzer\", ".txt", "LogAnalyzer", False)
 
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Open a test log file just for testing
-        'OpenLogFile("C:\Users\Manos\Desktop\log.txt")
-        'With My.Application.Info.Version
-        '    MsgBox("V" & .Major & "." & .Minor & "." & .Build & "." & .Revision)
-        'End With
-
+        Log.Write("Starting")
     End Sub
 
 #Region "Helper"
@@ -50,16 +45,16 @@ Public Class Main
         If Not IO.File.Exists(Path) Then Exit Sub
         LogPath = Path
         LogFile = IO.File.ReadAllLines(Path)
-
+        Log.Write("Loaded log file: " & Path)
         ' Check the validity of the log file
         If Not CheckLogFile() Then
             LogPath = ""
             LogFile = Nothing
+            Log.Write("Invalid log file")
             Exit Sub
         End If
 
         ToolStripStatusLabel_LogFile.Text = Path
-
         AnalyzeLogFile()
     End Sub
 
@@ -122,12 +117,18 @@ Public Class Main
         Dim NewLogFile(LogFile.Count() - CorruptedLines.Count() - 1) As String
         Dim Line As Integer = 0
         For Index As Integer = 0 To LogFile.Count - 1
-            If Index <> CorruptedLines.Item(0) Then
-                NewLogFile(Line) = LogFile(Index)
-                Line += 1
+            If CorruptedLines.Count > 0 Then
+                If Index <> CorruptedLines.Item(0) Then
+AddLine:
+                    NewLogFile(Line) = LogFile(Index)
+                    Line += 1
+                Else
+                    CorruptedLines.RemoveAt(0)
+                End If
             Else
-                CorruptedLines.RemoveAt(0)
+                GoTo AddLine
             End If
+
         Next
         LogFile = NewLogFile
 
@@ -139,11 +140,11 @@ Public Class Main
         Select Case LogHeaders(0)
             Case "vtime"
                 LogType = LogFileType.UoP6e
-                MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
+                'MsgBox("Loaded UoP6e log file.", MsgBoxStyle.Information, "Success")
                 LoadLogFile_6()
             Case "vTime[s]"
                 LogType = LogFileType.FSG
-                MsgBox("Loaded FSG log file.", MsgBoxStyle.Information, "Success")
+                'MsgBox("Loaded FSG log file.", MsgBoxStyle.Information, "Success")
                 LoadLogFile_FSG()
             Case "DT"
                 LogType = LogFileType.UoP7e
@@ -199,7 +200,7 @@ Public Class Main
         ' FIXME: These will need to be searched and not statically acquired
         MinTime = LogFile(1).Split(LogDelimiter)(0)
         MaxTime = LogFile(LogFile.Count - 1).Split(LogDelimiter)(0)
-        LogFileLength = (MaxTime - MinTime) / 1000.0
+        LogFileLength = (MaxTime - MinTime) ' / 1000.0
         MaxScaleSize = LogFileLength
         ScaleSize = MaxScaleSize
         CheckedListBox.Items.Clear()
@@ -242,8 +243,8 @@ Public Class Main
         Dim AreaSeries As String = Chart.Series(Area.Name.Replace("ChartArea_", "Series_")).Name
         Dim Series As Series = Chart.Series(AreaSeries)
 
-        Area.AxisX.LabelStyle.Format = "HH:mm:ss"
-        Area.AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Seconds
+        Area.AxisX.LabelStyle.Format = "{0:0,.###}s"
+        Area.AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Number
         Area.AxisX.LabelStyle.Interval = ScaleSize / My.Settings.Chart_Scale_Interval
         Area.AxisX.MajorGrid.LineColor = My.Settings.Chart_GridColor
         Area.AxisY.MajorGrid.LineColor = My.Settings.Chart_GridColor
@@ -251,21 +252,21 @@ Public Class Main
         Area.AxisX.MajorGrid.Enabled = True
         Area.AxisX.MajorTickMark.Enabled = True
         Area.AxisX.MinorGrid.Enabled = False
-        Area.AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Seconds
+        Area.AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Number
         Area.AxisX.MajorGrid.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids
-        Area.AxisX.MajorTickMark.IntervalType = DateTimeIntervalType.Seconds
+        Area.AxisX.MajorTickMark.IntervalType = DateTimeIntervalType.Number
         Area.AxisX.MajorTickMark.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 2
         Area.AxisX.MajorTickMark.TickMarkStyle = TickMarkStyle.InsideArea
 
-        Area.AxisX.MinorGrid.IntervalType = DateTimeIntervalType.Seconds
+        Area.AxisX.MinorGrid.IntervalType = DateTimeIntervalType.Number
         Area.AxisX.MinorGrid.Interval = ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 5
         Area.AxisX.MinorGrid.LineColor = System.Drawing.Color.LightGray
         Area.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dot
-        Area.AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Seconds
+        Area.AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Number
         Area.AxisX.ScaleView.MinSize = My.Settings.Chart_Scale_MaxZoom
-        Area.AxisX.ScaleView.SizeType = DateTimeIntervalType.Seconds
+        Area.AxisX.ScaleView.SizeType = DateTimeIntervalType.Number
         Area.AxisX.ScaleView.Size = LogFileLength
-        Area.AxisX.ScaleView.SmallScrollSizeType = DateTimeIntervalType.Seconds
+        Area.AxisX.ScaleView.SmallScrollSizeType = DateTimeIntervalType.Number
         Area.AxisX.ScaleView.SmallScrollSize = 1.0R
 
         ' Enable this to enable the zoom using the cursor
@@ -278,7 +279,7 @@ Public Class Main
         Area.CursorX.IsUserSelectionEnabled = True
         Area.CursorX.AutoScroll = False
         Area.CursorX.AxisType = AxisType.Primary
-        Area.CursorX.IntervalType = DateTimeIntervalType.Seconds
+        Area.CursorX.IntervalType = DateTimeIntervalType.Number
         Area.CursorX.Interval = 0.0R
 
     End Sub
@@ -303,22 +304,6 @@ Public Class Main
         Return Areas
     End Function
 
-    Private Sub SetChartTime()
-        '' Set the start point of the X-axis as the current time for the UoP6e
-        'Dim Time As New DateTime
-        'If LogType = LogFileType.UoP6e Then
-        '    Time = Now
-        'ElseIf LogType = LogFileType.UoP7e Then
-        '    ' Time = datetime from log file name
-        '    ' Else pop up to set time
-        'ElseIf LogType = LogFileType.FSG Then
-        '    Time = Now
-        'Else
-        '    ' Pop up to set time
-        'End If
-        ChartTimeOffset = Now 'Time
-    End Sub
-
     Private Sub UpdateChart()
         Try
 
@@ -328,9 +313,6 @@ Public Class Main
             Dim Areas As Integer = LimitChartAreas()
             ' Scroll the chart areas to display the maximum chart areas only
             Dim Areas_Index As Integer = ChartScrollIndex
-
-            ' Set the X-axis vaues depending on whether the log file has datetime information
-            SetChartTime()
 
             ' For each requested chart
             For Index As Integer = 1 To CheckedListBox.Items.Count
@@ -369,7 +351,7 @@ Public Class Main
                     ' Include the MIN and MAX values to the legend
                     Series.LegendText = LogHeaders(Index) & " Min: #MIN{D0}, Max: #MAX{D0}"
                     Series.ChartType = My.Settings.Chart_Series_Type 'SeriesChartType.FastPoint
-                    Series.XValueType = ChartValueType.DateTime
+                    Series.XValueType = ChartValueType.Int32
                     Series.BorderWidth = My.Settings.Chart_Border_Size
                     ' Set the Y-axis value properties
                     Series.YValueType = ChartValueType.Auto
@@ -380,7 +362,8 @@ Public Class Main
                     Dim Line As String() = LogFile(1).Split(LogDelimiter)
                     Dim Millis As Integer = Line(0)
                     Dim LastValue As Double = CDbl(Line(Index))
-                    Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                    'Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                    Series.Points.AddXY(Millis, LastValue)
                     Dim Avoided As Integer = 0
                     ' Maximum points to be ignored at once
                     Dim MaxAvoided As Integer = 100
@@ -402,7 +385,8 @@ Public Class Main
                         End If
                         If CDbl(Line(Index)) <> LastValue Or Index2 = LogFile.Count - 1 Then
                             LastValue = CDbl(Line(Index))
-                            Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                            'Series.Points.AddXY(ChartTimeOffset.AddMilliseconds(Millis), LastValue)
+                            Series.Points.AddXY(Millis, LastValue)
                         Else
                             Avoided += 1
                             If Avoided = MaxAvoided Then
@@ -424,7 +408,7 @@ Public Class Main
             AutoScaleY()
 
         Catch ex As Exception
-            Log.Write(ex.Message & vbNewLine)
+            Log.Write(ex.Message)
         End Try
     End Sub
 
@@ -440,7 +424,6 @@ Public Class Main
 
     Private MinTime As Double = 0 ' Auto calculated when log file is opened
     Private MaxTime As Double = 0 ' Auto calculated when log file is opened
-    Private ChartTimeOffset As DateTime = Now
     Private ChartResetScale As AxisScaleView
 
 #Region "Scrolling"
@@ -546,7 +529,7 @@ Public Class Main
 
             ' Calculate the new scale size and position for the chart areas
 
-            ' The pre zoom scale (in seconds)
+            ' The pre zoom scale (in milliseconds)
             Dim CurrentScale As Double = Chart.ChartAreas(0).AxisX.ScaleView.Size
             ' The relative position of the cursor inside the chart area (in %)
             Dim CursorPosition As Integer = Math.Round(Map(Chart.ChartAreas(0).AxisX.PixelPositionToValue(e.X),
@@ -565,7 +548,6 @@ Public Class Main
             Dim NewMax As Double = Max
 
             ' Variables to hold the new calculated minimum/maximum views
-            Dim _NewMin, _NewMax As New DateTime
             Dim _NewSize As Double
 
             If ScaleSizeRatio > 1 Then
@@ -573,24 +555,20 @@ Public Class Main
 
                 ' The total percentage of the amount of time that needs to be removed from the new scale (in fraction)
                 Dim Multiplier As Double = (1.0 - (ScaleSize / CurrentScale))
-                ' The total amount of time that needs to be removed from the new scale (in seconds)
+                ' The total amount of time that needs to be removed from the new scale (in milliseconds)
                 Dim TimeLoss As Double = CurrentScale * Multiplier
                 ' The fraction of the Multiplier that needs to be removed from the left of the pivot (in %)
                 Dim LeftMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 0.0, 1.0)
                 ' The fraction of the Multiplier that needs to be removed from the right of the pivot (in %)
                 Dim RightMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 1.0, 0.0)
-                ' The amount of time that needs to be removed from each side of the pivot (in seconds)
+                ' The amount of time that needs to be removed from each side of the pivot (in milliseconds)
                 Dim LeftAmount As Double = TimeLoss * LeftMultiplier
                 Dim RightAmount As Double = TimeLoss * RightMultiplier
 
                 ' Calculate the new view minimums/maximums
-                NewMin = DateTime.FromOADate(Min).AddSeconds(LeftAmount).ToOADate()
-                NewMax = DateTime.FromOADate(Max).Subtract(New TimeSpan(0, 0, RightAmount)).ToOADate()
-                ' Convert the views to their equivalent datetime
-                _NewMin = DateTime.FromOADate(NewMin)
-                _NewMax = DateTime.FromOADate(NewMax)
-                ' Calculate the size of the new scale view (in seconds)
-                _NewSize = _NewMax.Subtract(_NewMin).TotalSeconds
+                NewMin = Min + LeftAmount
+                NewMax = Max - RightAmount
+                _NewSize = NewMax - NewMin
             Else
                 ' Zoom Out
 
@@ -603,23 +581,18 @@ Public Class Main
                 Dim LeftMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 1.0, 0.0)
                 ' The fraction of the Multiplier that needs to be added to the right of the pivot (in %)
                 Dim RightMultiplier As Double = Map(CursorPosition, 0.0, 100.0, 0.0, 1.0)
-                ' The amount of time that needs to be removed from each side of the pivot (in seconds)
+                ' The amount of time that needs to be removed from each side of the pivot (in milliseconds)
                 Dim LeftAmount As Double = TimeGain * LeftMultiplier
                 Dim RightAmount As Double = TimeGain * RightMultiplier
 
                 ' Calculate the new view minimums/maximums
-                NewMin = DateTime.FromOADate(Min).Subtract(New TimeSpan(0, 0, LeftAmount)).ToOADate()
-                NewMax = DateTime.FromOADate(Max).AddSeconds(RightAmount).ToOADate()
-                ' Convert the views to their equivalent datetime
-                _NewMin = DateTime.FromOADate(NewMin)
-                _NewMax = DateTime.FromOADate(NewMax)
-                ' Calculate the size of the new scale view (in seconds)
-                _NewSize = _NewMax.Subtract(_NewMin).TotalSeconds
-
+                NewMin = Min - LeftAmount
+                NewMax = Max + RightAmount
+                _NewSize = NewMax - NewMin
             End If
 
             ' Zoom and scroll the chart
-            ScaleSize = _NewSize
+            ScaleSize = Math.Max(_NewSize, 0)
             Chart.ChartAreas(0).AxisX.ScaleView.Size = ScaleSize
             ScalePosition = NewMin
             Chart.ChartAreas(0).AxisX.ScaleView.Scroll(ScalePosition)
@@ -674,37 +647,40 @@ Public Class Main
     ' Show the chart X-axis scale and grid/selection size in the status bar
     Private Sub UpdateScales()
 
-        ' ScaleSize is measured in seconds
-        ToolStripStatusLabel_Scale.Text = "Window Size: "
-        If ScaleSize < 1 Then
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize * 1000.0).ToString("F") & " msec, "
-        ElseIf ScaleSize > 60 Then
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize / 60.0).ToString("F1") & " min, "
-        Else
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize).ToString("F1") & " sec, "
-        End If
-        ToolStripStatusLabel_Scale.Text &= "Grid Size: "
-        If (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) < 1 Then
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids * 1000.0).ToString("F") & " msec"
-        ElseIf (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 60 Then
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60.0).ToString("F1") & " min"
-        Else
-            ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F1") & " sec"
-        End If
-
         If Chart.ChartAreas.Count > 0 Then
-            Dim SelectionLength As TimeSpan = SelectionSize()
-            If SelectionLength = TimeSpan.Zero Then
-                Exit Sub
-            End If
-            ToolStripStatusLabel_Scale.Text &= ", Selection Size: "
-            If SelectionLength.TotalSeconds > 60 Then
-                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMinutes.ToString("F1") & " min"
-            ElseIf SelectionLength.TotalSeconds < 1 Then
-                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalMilliseconds.ToString("F") & " msec"
+            ' ScaleSize is measured in milliseconds
+
+            ToolStripStatusLabel_Scale.Text = "Window Size: "
+            If ScaleSize > 60000 Then
+                ToolStripStatusLabel_Scale.Text &= (ScaleSize / 60000.0).ToString("F1") & " min, "
+            ElseIf ScaleSize > 1000 Then
+                ToolStripStatusLabel_Scale.Text &= (ScaleSize / 1000.0).ToString("F1") & " sec, "
             Else
-                ToolStripStatusLabel_Scale.Text &= SelectionLength.TotalSeconds.ToString("F1") & " sec"
+                ToolStripStatusLabel_Scale.Text &= ScaleSize.ToString("F0") & " msec, "
             End If
+
+            ToolStripStatusLabel_Scale.Text &= "Grid Size: "
+            If (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 60000 Then
+                ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 60000.0).ToString("F1") & " min"
+            ElseIf (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids) > 1000 Then
+                ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids / 1000.0).ToString("F1") & " sec"
+            Else
+                ToolStripStatusLabel_Scale.Text &= (ScaleSize / My.Settings.Chart_Scale_AxisX_Grids).ToString("F0") & " msec"
+            End If
+
+            Dim SelectionLength As Double = SelectionSize()
+            If SelectionLength = 0 Then Exit Sub
+
+            ToolStripStatusLabel_Scale.Text &= ", Selection Size: "
+
+            If SelectionLength > 60000 Then
+                ToolStripStatusLabel_Scale.Text &= (SelectionLength / 60000.0).ToString("F1") & " min"
+            ElseIf SelectionLength > 1000 Then
+                ToolStripStatusLabel_Scale.Text &= (SelectionLength / 1000.0).ToString("F1") & " sec"
+            Else
+                ToolStripStatusLabel_Scale.Text &= SelectionLength.ToString("F") & " msec"
+            End If
+
         End If
 
     End Sub
@@ -719,16 +695,15 @@ Public Class Main
 
     ' Variables to handle the cursor selection
     Private Selecting As Boolean = False
-    Private SelectionStart As DateTime
-    Private SelectionEnd As DateTime
+    Private SelectionStart As Integer
+    Private SelectionEnd As Integer
 
     ' Cursor selection changing
     Private Sub Chart_SelectionRangeChanging(sender As Object, e As CursorEventArgs) Handles Chart.SelectionRangeChanging
         ' Start displaying the selection range instead of the chart values
         Selecting = True
-        SelectionStart = DateTime.FromOADate(e.NewSelectionStart)
-        SelectionEnd = DateTime.FromOADate(e.NewSelectionEnd)
-
+        SelectionStart = e.NewSelectionStart 'DateTime.FromOADate(e.NewSelectionStart)
+        SelectionEnd = e.NewSelectionEnd 'DateTime.FromOADate(e.NewSelectionEnd)
         ' Sync selection between charts
         For Each Area As ChartArea In Chart.ChartAreas
             If Area IsNot e.ChartArea Then
@@ -755,67 +730,65 @@ Public Class Main
         If Chart.ChartAreas.Count > 0 Then
 
             Dim Values As String = ""
-            Dim FirstAreaOnly As Boolean = False
-            Dim XValue As Double = -1
-            Dim Point As New DataPoint
-            Dim PointTime As New DateTime
-
-            ' For all chart areas
-            For Each Area As ChartArea In Chart.ChartAreas
-
-                ' Draw the cursor
-                Try
-                    Area.CursorX.SetCursorPixelPosition(e.Location, True)
-                    'Area.CursorY.SetCursorPixelPosition(e.Location, True)
-                    CursorPosition = e.Location
-                Catch ex As Exception
-                    Continue For
-                End Try
-
-                ' Get the X-axis value based on the cursor position
-                If Not FirstAreaOnly Then
-                    Try
-                        XValue = Area.AxisX.PixelPositionToValue(e.X)
-                    Catch ex As Exception
-                        Exit Sub
-                    End Try
-                End If
-
-                ' The series on the specific area
-                Dim Series As Series = Chart.Series(Area.Name.Replace("ChartArea_", "Series_"))
-
-                ' Find the point closest to the X-axis value
-                Point = ClosestPoint(Series.Points, XValue)
-                If Not FirstAreaOnly Then
-                    PointTime = DateTime.FromOADate(Point.XValue)
-                    FirstAreaOnly = True
-                End If
-
-                ' Append the values to the tooltip text
-                Values &= (Series.Name.Replace("Series_", "") & ":").PadRight(20, " ")
-                Values &= "(" & PointTime.ToString("hh:mm:ss.fff") & ", " & Point.YValues(0) & ")" & vbNewLine
-
-            Next
 
             ' If cursor is selecting then show the selection range
             If Selecting Then
-                Values = "Selection Start: " & SelectionStart.ToString("hh:mm:ss.fff") & vbNewLine
-                Values &= "Selection End: " & SelectionEnd.ToString("hh:mm:ss.fff") & vbNewLine
-                Dim Length As Double = Math.Abs(SelectionEnd.Subtract(SelectionStart).TotalMilliseconds)
+                Values = "Selection Start: " & SelectionStart.ToString("F0") & " ms" & vbNewLine
+                Values &= "Selection End: " & SelectionEnd.ToString("F0") & " ms" & vbNewLine
+                Dim Length As Double = Math.Abs(SelectionEnd - SelectionStart)
                 Values &= "Selection Length: "
-                If Length < 1000 Then
-                    Values &= Length.ToString("F") & " msec"
-                ElseIf Length < 60000 Then
-                    Values &= (Length / 1000).ToString("F1") & " sec"
+                If Length > 60000 Then
+                    Values &= (Length / 60000.0).ToString("F1") & " min"
+                ElseIf Length > 1000 Then
+                    Values &= (Length / 1000.0).ToString("F1") & " sec"
                 Else
-                    Values &= (Length / 60000).ToString("F1") & " min"
+                    Values &= Length.ToString("F0") & " msec"
                 End If
-                ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
-            Else
-                ' Else show the chart values
-                ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
-            End If
 
+            Else
+                Dim FirstAreaOnly As Boolean = False
+                Dim XValue As Double = -1
+                Dim Point As New DataPoint
+                Dim PointTime As New Double 'DateTime
+
+                ' For all chart areas
+                For Each Area As ChartArea In Chart.ChartAreas
+
+                    ' Draw the cursor
+                    Try
+                        Area.CursorX.SetCursorPixelPosition(e.Location, True)
+                        'Area.CursorY.SetCursorPixelPosition(e.Location, True)
+                        CursorPosition = e.Location
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+
+                    ' Get the X-axis value based on the cursor position
+                    If Not FirstAreaOnly Then
+                        Try
+                            XValue = Area.AxisX.PixelPositionToValue(e.X)
+                        Catch ex As Exception
+                            Exit Sub
+                        End Try
+                    End If
+
+                    ' The series on the specific area
+                    Dim Series As Series = Chart.Series(Area.Name.Replace("ChartArea_", "Series_"))
+
+                    ' Find the point closest to the X-axis value
+                    Point = ClosestPoint(Series.Points, XValue)
+                    If Not FirstAreaOnly Then
+                        PointTime = Point.XValue
+                        FirstAreaOnly = True
+                    End If
+
+                    ' Append the values to the tooltip text
+                    Values &= (Series.Name.Replace("Series_", "") & ":").PadRight(20, " ")
+                    Values &= "(" & PointTime & " ms, " & Point.YValues(0) & ")" & vbNewLine
+
+                Next
+            End If
+            ToolTip.Show(Values, Chart, New Point(e.X + 15, e.Y))
         End If
     End Sub
 
@@ -898,22 +871,22 @@ Public Class Main
 
 #Region "Chart Menu"
 
-    Private Function SelectionSize() As TimeSpan
+    Private Function SelectionSize() As Double
         If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd()) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Then
-            Return TimeSpan.Zero
+            Return 0
         End If
-        Dim SelectionLength As TimeSpan = (DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionEnd) - DateTime.FromOADate(Chart.ChartAreas(0).CursorX.SelectionStart)).Duration
+        Dim SelectionLength As Double = Math.Abs(Chart.ChartAreas(0).CursorX.SelectionEnd - Chart.ChartAreas(0).CursorX.SelectionStart)
         Return SelectionLength
     End Function
 
     Private Sub ResetScaleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ResetScaleToolStripMenuItem.Click
-        ZoomChart(LogFileLength, ChartTimeOffset.AddMilliseconds(LogFile(1).Split(LogDelimiter)(0)).ToOADate)
+        ZoomChart(LogFileLength, LogFile(1).Split(LogDelimiter)(0))
     End Sub
 
     Private Sub ZoomToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZoomToSelectionToolStripMenuItem.Click
         If ChartEmpty() Then Exit Sub
         If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd) Then Exit Sub
-        ZoomChart(SelectionSize.TotalSeconds, Math.Min(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd))
+        ZoomChart(SelectionSize, Math.Min(Chart.ChartAreas(0).CursorX.SelectionStart, Chart.ChartAreas(0).CursorX.SelectionEnd))
     End Sub
 
     Private Sub HideLegendsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HideLegendsToolStripMenuItem.Click
@@ -985,6 +958,11 @@ Public Class Main
     End Sub
 
     Private Sub DataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataToolStripMenuItem.Click
+        DataEditor.Show()
+    End Sub
 
+    Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Log.Write("Ending")
+        Log.Close()
     End Sub
 End Class

@@ -40,6 +40,7 @@ Partial Class Main
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DataToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -55,7 +56,6 @@ Partial Class Main
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
-        Me.DataToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -170,8 +170,14 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
+        '
+        'DataToolStripMenuItem
+        '
+        Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
+        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.DataToolStripMenuItem.Text = "Data"
         '
         'HelpToolStripMenuItem
         '
@@ -183,13 +189,13 @@ Partial Class Main
         'ReportToolStripMenuItem
         '
         Me.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem"
-        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ReportToolStripMenuItem.Size = New System.Drawing.Size(109, 22)
         Me.ReportToolStripMenuItem.Text = "Report"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(109, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'OpenFileDialog
@@ -210,6 +216,8 @@ Partial Class Main
         'ToolTip
         '
         Me.ToolTip.AutomaticDelay = 100
+        Me.ToolTip.UseAnimation = False
+        Me.ToolTip.UseFading = False
         '
         'StatusStrip
         '
@@ -278,12 +286,6 @@ Partial Class Main
         Me.PictureBox_LoadLog.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox_LoadLog.TabIndex = 29
         Me.PictureBox_LoadLog.TabStop = False
-        '
-        'DataToolStripMenuItem
-        '
-        Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
-        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.DataToolStripMenuItem.Text = "Data"
         '
         'Main
         '

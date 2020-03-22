@@ -92,6 +92,12 @@
     <Compile Include="AboutBox.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="DataEditor.Designer.vb">
+      <DependentUpon>DataEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DataEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Logger.vb" />
     <Compile Include="Main.vb">
       <SubType>Form</SubType>
@@ -138,6 +144,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataEditor.resx">
+      <DependentUpon>DataEditor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.vb</DependentUpon>
