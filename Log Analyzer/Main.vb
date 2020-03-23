@@ -8,6 +8,11 @@ Public Class Main
         Log.Write("Starting")
     End Sub
 
+    Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Log.Write("Ending")
+        Log.Close()
+    End Sub
+
 #Region "Helper"
 
     Private Function Map(ByVal Value As Double, ByVal Low As Double, ByVal High As Double, ByVal toLow As Double, ByVal toHigh As Double)
@@ -27,10 +32,10 @@ Public Class Main
 #Region "Log Opening"
 
     Dim LogPath As String
-    Dim LogFile As String()
-    Dim LogHeaders As String()
+    Public Shared LogFile As String() = Nothing
+    Public Shared LogHeaders As String() = Nothing
     Dim LogFileLength As Integer = 0
-    Private LogDelimiter As Char = ","
+    Public Shared LogDelimiter As Char = ","
     Private SecondLogDelimiter As Char = ";"
     Private Enum LogFileType
         UoP6e
@@ -50,6 +55,7 @@ Public Class Main
         If Not CheckLogFile() Then
             LogPath = ""
             LogFile = Nothing
+            LogHeaders = Nothing
             Log.Write("Invalid log file")
             Exit Sub
         End If
@@ -879,6 +885,10 @@ AddLine:
         If IO.File.Exists(Log.Path) = True Then Process.Start(Log.Path)
     End Sub
 
+    Private Sub DataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataToolStripMenuItem.Click
+        If LogFile IsNot Nothing And LogHeaders IsNot Nothing Then DataEditor.Show()
+    End Sub
+
 #End Region
 
 #Region "Debug"
@@ -976,15 +986,6 @@ AddLine:
             Case Keys.Down
 
         End Select
-    End Sub
-
-    Private Sub DataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataToolStripMenuItem.Click
-        DataEditor.Show()
-    End Sub
-
-    Private Sub Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        Log.Write("Ending")
-        Log.Close()
     End Sub
 
 End Class

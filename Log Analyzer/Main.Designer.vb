@@ -171,14 +171,14 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'DataToolStripMenuItem
         '
         Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
-        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
-        Me.DataToolStripMenuItem.Text = "Data"
+        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DataToolStripMenuItem.Text = "Data Editor"
         '
         'HelpToolStripMenuItem
         '
