@@ -102,7 +102,7 @@
         _ValueChanged = False
         Button_Save.Enabled = False
 
-        Main.SettingsUpdated()
+        Main.DataUpdated()
     End Sub
 
     Private Sub TrackBar_BorderSize_Scroll(sender As Object, e As EventArgs) Handles TrackBar_BorderSize.Scroll

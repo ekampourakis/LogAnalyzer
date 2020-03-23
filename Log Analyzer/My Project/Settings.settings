@@ -21,10 +21,10 @@
       <Value Profile="(Default)">6</Value>
     </Setting>
     <Setting Name="Chart_Series_Type" Type="System.Windows.Forms.DataVisualization.Charting.SeriesChartType" Scope="User">
-      <Value Profile="(Default)">FastPoint</Value>
+      <Value Profile="(Default)">FastLine</Value>
     </Setting>
     <Setting Name="Chart_Border_Size" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">1.5</Value>
     </Setting>
     <Setting Name="Chart_LimitCPU" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

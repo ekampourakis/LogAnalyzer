@@ -33,14 +33,16 @@ Partial Class Main
         Me.HideLegendsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HideAnnotationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.EditAreasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DataEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TrimToSelectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckedListBox = New System.Windows.Forms.CheckedListBox()
         Me.MenuStrip = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DataToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -57,6 +59,7 @@ Partial Class Main
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
+        Me.SaveFileDialog = New System.Windows.Forms.SaveFileDialog()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -78,9 +81,9 @@ Partial Class Main
         'ContextMenuStrip_Chart
         '
         Me.ContextMenuStrip_Chart.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.EditAreasToolStripMenuItem})
+        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.DataEditorToolStripMenuItem, Me.ToolStripSeparator4, Me.TrimToSelectionToolStripMenuItem})
         Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
-        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(174, 132)
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(174, 160)
         '
         'ResetScaleToolStripMenuItem
         '
@@ -121,11 +124,22 @@ Partial Class Main
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(170, 6)
         '
-        'EditAreasToolStripMenuItem
+        'DataEditorToolStripMenuItem
         '
-        Me.EditAreasToolStripMenuItem.Name = "EditAreasToolStripMenuItem"
-        Me.EditAreasToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
-        Me.EditAreasToolStripMenuItem.Text = "Edit Areas"
+        Me.DataEditorToolStripMenuItem.Name = "DataEditorToolStripMenuItem"
+        Me.DataEditorToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.DataEditorToolStripMenuItem.Text = "Data Editor"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(170, 6)
+        '
+        'TrimToSelectionToolStripMenuItem
+        '
+        Me.TrimToSelectionToolStripMenuItem.Name = "TrimToSelectionToolStripMenuItem"
+        Me.TrimToSelectionToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.TrimToSelectionToolStripMenuItem.Text = "Trim To Selection"
         '
         'CheckedListBox
         '
@@ -150,7 +164,7 @@ Partial Class Main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.ExportToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -158,12 +172,18 @@ Partial Class Main
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(103, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
+        '
+        'ExportToolStripMenuItem
+        '
+        Me.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem"
+        Me.ExportToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExportToolStripMenuItem.Text = "Export"
         '
         'EditToolStripMenuItem
         '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem, Me.DataToolStripMenuItem})
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SettingsToolStripMenuItem})
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(39, 20)
         Me.EditToolStripMenuItem.Text = "Edit"
@@ -171,14 +191,8 @@ Partial Class Main
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
-        '
-        'DataToolStripMenuItem
-        '
-        Me.DataToolStripMenuItem.Name = "DataToolStripMenuItem"
-        Me.DataToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.DataToolStripMenuItem.Text = "Data Editor"
         '
         'HelpToolStripMenuItem
         '
@@ -255,12 +269,12 @@ Partial Class Main
         '
         'Timer_ChartUpdate
         '
-        Me.Timer_ChartUpdate.Interval = 1000
+        Me.Timer_ChartUpdate.Interval = 250
         '
         'Timer_SeriesHide
         '
         Me.Timer_SeriesHide.Enabled = True
-        Me.Timer_SeriesHide.Interval = 3000
+        Me.Timer_SeriesHide.Interval = 500
         '
         'Label_Series
         '
@@ -292,6 +306,11 @@ Partial Class Main
         Me.PictureBox_LoadLog.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.PictureBox_LoadLog.TabIndex = 29
         Me.PictureBox_LoadLog.TabStop = False
+        '
+        'SaveFileDialog
+        '
+        Me.SaveFileDialog.Filter = "Log Files|*.txt|All Files|*.*"
+        Me.SaveFileDialog.Title = "Export the log file..."
         '
         'Main
         '
@@ -349,12 +368,15 @@ Partial Class Main
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel_LogFile As ToolStripStatusLabel
     Friend WithEvents HideAnnotationsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
-    Friend WithEvents EditAreasToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ReportToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PictureBox_LoadLog As PictureBox
-    Friend WithEvents DataToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ShowLogToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents TrimToSelectionToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ExportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents DataEditorToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SaveFileDialog As SaveFileDialog
 End Class

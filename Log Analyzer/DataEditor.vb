@@ -38,7 +38,7 @@
             LogFile(Index) = String.Join(Delimiter, Line)
         Next
         Main.LogFile = LogFile
-        Main.SettingsUpdated()
+        Main.DataUpdated()
     End Sub
 
     Private Sub Multiply(ByVal Value As Double, ByVal Column As Integer)
@@ -50,7 +50,7 @@
             LogFile(Index) = String.Join(Delimiter, Line)
         Next
         Main.LogFile = LogFile
-        Main.SettingsUpdated()
+        Main.DataUpdated()
     End Sub
 
     Private Sub EMA(ByVal Alpha As Double, ByVal Column As Integer)
@@ -64,7 +64,7 @@
             LogFile(Index) = String.Join(Delimiter, Line)
         Next
         Main.LogFile = LogFile
-        Main.SettingsUpdated()
+        Main.DataUpdated()
     End Sub
 
     Private Sub MA(ByVal WindowSize As Integer, ByVal Column As Integer)
@@ -83,7 +83,7 @@
             LogFile(Index) = String.Join(Delimiter, Line)
         Next
         Main.LogFile = LogFile
-        Main.SettingsUpdated()
+        Main.DataUpdated()
     End Sub
 
     Private Sub Lock()
@@ -130,7 +130,7 @@
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to apply the filters to the log file?", "Apply filters", MessageBoxButtons.OKCancel)
         If result = DialogResult.Cancel Then
             Main.LogFile = DeepClone(LogFile_Backup)
-            Main.SettingsUpdated()
+            Main.DataUpdated()
         End If
     End Sub
 
@@ -138,7 +138,7 @@
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to reset the applied filters?", "Reset filters", MessageBoxButtons.OKCancel)
         If result = DialogResult.OK Then
             Main.LogFile = DeepClone(LogFile_Backup)
-            Main.SettingsUpdated()
+            Main.DataUpdated()
         End If
     End Sub
 

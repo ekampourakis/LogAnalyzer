@@ -29,14 +29,15 @@ Public Class Main
 
 #End Region
 
-#Region "Log Opening"
+#Region "Log IO"
 
     Dim LogPath As String
     Public Shared LogFile As String() = Nothing
     Public Shared LogHeaders As String() = Nothing
     Dim LogFileLength As Integer = 0
     Public Shared LogDelimiter As Char = ","
-    Private SecondLogDelimiter As Char = ";"
+    Private Const FirstLogDelimiter As Char = ","
+    Private Const SecondLogDelimiter As Char = ";"
     Private Enum LogFileType
         UoP6e
         UoP7e
@@ -46,6 +47,7 @@ Public Class Main
     Private LogType As LogFileType = LogFileType.Generic
 
     Private Sub OpenLogFile(ByVal Path As String)
+        ClearCharts()
         ' Open the file
         If Not IO.File.Exists(Path) Then Exit Sub
         LogPath = Path
@@ -68,9 +70,9 @@ Public Class Main
         ' Log file must contain the headers in the first row
         If LogFile(0).StartsWith("vtime") Or LogFile(0).StartsWith("vTime") Then
             ' Headers must be seperated with a valid log delimiter
-            If LogFile(0).Contains(LogDelimiter) Or LogFile(0).Contains(SecondLogDelimiter) Then
+            If LogFile(0).Contains(FirstLogDelimiter) Or LogFile(0).Contains(SecondLogDelimiter) Then
                 ' Load the file into the structures
-                If Not LogFile(0).Contains(LogDelimiter) Then LogDelimiter = SecondLogDelimiter
+                If Not LogFile(0).Contains(FirstLogDelimiter) Then LogDelimiter = SecondLogDelimiter Else LogDelimiter = FirstLogDelimiter
                 LogHeaders = LogFile(0).Replace(" ", "").Split(LogDelimiter)
             Else
                 MsgBox("The selected file doesn't appear to be a valid log file. Only comma (,) or semicolon (;) seperated data are supported.", MsgBoxStyle.Critical, "Error")
@@ -206,7 +208,7 @@ AddLine:
         ' FIXME: These will need to be searched and not statically acquired
         MinTime = LogFile(1).Split(LogDelimiter)(0)
         MaxTime = LogFile(LogFile.Count - 1).Split(LogDelimiter)(0)
-        LogFileLength = (MaxTime - MinTime) ' / 1000.0
+        LogFileLength = (MaxTime - MinTime)
         MaxScaleSize = LogFileLength
         ScaleSize = MaxScaleSize
         CheckedListBox.Items.Clear()
@@ -238,6 +240,16 @@ AddLine:
 
     Private Sub OpenFileDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog.FileOk
         OpenLogFile(OpenFileDialog.FileName)
+    End Sub
+
+    Private Sub SaveFileDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog.FileOk
+        Dim Writer As New IO.StreamWriter(SaveFileDialog.FileName)
+        Writer.WriteLine(String.Join(FirstLogDelimiter, LogHeaders))
+        For Index As Integer = 1 To LogFile.Count - 1
+            Writer.WriteLine(String.Join(FirstLogDelimiter, LogFile(Index).Split(LogDelimiter)))
+        Next
+        Writer.Close()
+        Writer.Dispose()
     End Sub
 
 #End Region
@@ -691,7 +703,7 @@ AddLine:
 
     End Sub
 
-    Public Sub SettingsUpdated()
+    Public Sub DataUpdated()
         UpdateChart()
     End Sub
 
@@ -701,15 +713,16 @@ AddLine:
 
     ' Variables to handle the cursor selection
     Private Selecting As Boolean = False
-    Private SelectionStart As Integer
-    Private SelectionEnd As Integer
+    Private SelectionStart As Integer = Nothing
+    Private SelectionEnd As Integer = Nothing
+    Dim CursorPosition As Point
 
     ' Cursor selection changing
     Private Sub Chart_SelectionRangeChanging(sender As Object, e As CursorEventArgs) Handles Chart.SelectionRangeChanging
         ' Start displaying the selection range instead of the chart values
         Selecting = True
-        SelectionStart = e.NewSelectionStart 'DateTime.FromOADate(e.NewSelectionStart)
-        SelectionEnd = e.NewSelectionEnd 'DateTime.FromOADate(e.NewSelectionEnd)
+        SelectionStart = e.NewSelectionStart
+        SelectionEnd = e.NewSelectionEnd
         ' Sync selection between charts
         For Each Area As ChartArea In Chart.ChartAreas
             If Area IsNot e.ChartArea Then
@@ -885,10 +898,6 @@ AddLine:
         If IO.File.Exists(Log.Path) = True Then Process.Start(Log.Path)
     End Sub
 
-    Private Sub DataToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataToolStripMenuItem.Click
-        If LogFile IsNot Nothing And LogHeaders IsNot Nothing Then DataEditor.Show()
-    End Sub
-
 #End Region
 
 #Region "Debug"
@@ -948,8 +957,46 @@ AddLine:
         Chart.Series(1).ChartArea = Chart.ChartAreas(0).Name
     End Sub
 
-    Private Sub EditAreasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditAreasToolStripMenuItem.Click
-        AreaEditor.Show()
+    Private Sub TrimToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TrimToSelectionToolStripMenuItem.Click
+        TrimLog()
+    End Sub
+
+    Private Sub DataEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DataEditorToolStripMenuItem.Click
+        If LogFile IsNot Nothing And LogHeaders IsNot Nothing Then DataEditor.Show()
+    End Sub
+
+    Private Sub ExportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportToolStripMenuItem.Click
+        SaveFileDialog.FileName = LogPath.Substring(LogPath.LastIndexOf("\") + 1)
+        SaveFileDialog.ShowDialog()
+    End Sub
+
+#End Region
+
+#Region "Data Editing"
+
+    Private Sub TrimLog()
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to trim the log file? This will discard all values that are not in the selected range.", "Trim log file", MessageBoxButtons.OKCancel)
+        If result = DialogResult.OK Then
+            If SelectionStart > 0 And SelectionEnd > 0 Then
+                If Math.Abs(SelectionEnd - SelectionStart) > 500 Then ' At least 500ms
+                    Dim TrimFrom As Integer = Math.Min(SelectionStart, SelectionEnd)
+                    Dim TrimTo As Integer = Math.Max(SelectionStart, SelectionEnd)
+                    Dim NewLog As New List(Of String)
+                    LogHeaders(0) = "vtime"
+                    NewLog.Add(String.Join(FirstLogDelimiter, LogHeaders))
+                    For Index As Integer = 1 To LogFile.Count - 1
+                        Dim Line As String() = LogFile(Index).Split(LogDelimiter)
+                        If Line(0) >= TrimFrom And Line(0) <= TrimTo Then
+                            Line(0) -= TrimFrom
+                            NewLog.Add(String.Join(FirstLogDelimiter, Line))
+                        End If
+                    Next
+                    LogFile = NewLog.ToArray()
+                    CheckLogFile()
+                    AnalyzeLogFile()
+                End If
+            End If
+        End If
     End Sub
 
 #End Region
@@ -958,34 +1005,32 @@ AddLine:
 
     End Sub
 
-    Dim CursorPosition As Point
+    'Private Sub Chart_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
 
-    Private Sub Chart_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+    '    Select Case e.KeyCode
+    '        Case Keys.Left
 
-        Select Case e.KeyCode
-            Case Keys.Left
+    '            CursorPosition.X -= 1
+    '            If CursorPosition.X < 0 Then
+    '                CursorPosition.X = 0
+    '            End If
 
-                CursorPosition.X -= 1
-                If CursorPosition.X < 0 Then
-                    CursorPosition.X = 0
-                End If
+    '            For Each Area As ChartArea In Chart.ChartAreas
+    '                Try
+    '                    Area.CursorX.SetCursorPixelPosition(CursorPosition, True)
+    '                Catch ex As Exception
+    '                    Continue For
+    '                End Try
 
-                For Each Area As ChartArea In Chart.ChartAreas
-                    Try
-                        Area.CursorX.SetCursorPixelPosition(CursorPosition, True)
-                    Catch ex As Exception
-                        Continue For
-                    End Try
+    '            Next
 
-                Next
+    '        Case Keys.Right
 
-            Case Keys.Right
+    '        Case Keys.Up
 
-            Case Keys.Up
+    '        Case Keys.Down
 
-            Case Keys.Down
-
-        End Select
-    End Sub
+    '    End Select
+    'End Sub
 
 End Class
