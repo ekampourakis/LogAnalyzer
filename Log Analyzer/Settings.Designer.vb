@@ -42,6 +42,7 @@ Partial Class Settings
         Me.Label_BorderSize = New System.Windows.Forms.Label()
         Me.CheckBox_LimitCPU = New System.Windows.Forms.CheckBox()
         Me.CheckBox_ReduceFlicker = New System.Windows.Forms.CheckBox()
+        Me.CheckBox_ZeroLine = New System.Windows.Forms.CheckBox()
         CType(Me.TrackBar_ZoomSteps, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_ScaleInterval, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TrackBar_XGrids, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -238,11 +239,24 @@ Partial Class Settings
         Me.CheckBox_ReduceFlicker.Text = "Reduce flicker (Reduces cursor sensitivity)"
         Me.CheckBox_ReduceFlicker.UseVisualStyleBackColor = True
         '
+        'CheckBox_ZeroLine
+        '
+        Me.CheckBox_ZeroLine.AutoSize = True
+        Me.CheckBox_ZeroLine.Checked = True
+        Me.CheckBox_ZeroLine.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox_ZeroLine.Location = New System.Drawing.Point(247, 133)
+        Me.CheckBox_ZeroLine.Name = "CheckBox_ZeroLine"
+        Me.CheckBox_ZeroLine.Size = New System.Drawing.Size(103, 17)
+        Me.CheckBox_ZeroLine.TabIndex = 0
+        Me.CheckBox_ZeroLine.Text = "Y Axis Zero Line"
+        Me.CheckBox_ZeroLine.UseVisualStyleBackColor = True
+        '
         'Settings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(488, 379)
+        Me.Controls.Add(Me.CheckBox_ZeroLine)
         Me.Controls.Add(Me.CheckBox_ReduceFlicker)
         Me.Controls.Add(Me.CheckBox_LimitCPU)
         Me.Controls.Add(Me.TrackBar_BorderSize)
@@ -297,4 +311,5 @@ Partial Class Settings
     Friend WithEvents Label_BorderSize As Label
     Friend WithEvents CheckBox_LimitCPU As CheckBox
     Friend WithEvents CheckBox_ReduceFlicker As CheckBox
+    Friend WithEvents CheckBox_ZeroLine As CheckBox
 End Class

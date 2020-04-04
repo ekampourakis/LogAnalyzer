@@ -227,9 +227,9 @@ AddLine:
     End Sub
 
     Private Sub LoadLogFile_FSG()
-        Dim Offset As Integer = Math.Floor(LogFile(1).Split(LogDelimiter)(0) * 1000)
+        Dim Offset As Integer = Math.Floor(Double.Parse(LogFile(1).Split(LogDelimiter)(0), Globalization.CultureInfo.InvariantCulture) * 1000.0)
         For Index As Integer = 1 To LogFile.Count - 1
-            LogFile(Index) = CInt(CDbl(LogFile(Index).Split(LogDelimiter)(0)) * 1000) - Offset & LogFile(Index).Substring(LogFile(Index).IndexOf(LogDelimiter))
+            LogFile(Index) = CInt(Double.Parse(LogFile(Index).Split(LogDelimiter)(0), Globalization.CultureInfo.InvariantCulture) * 1000.0) - Offset & LogFile(Index).Substring(LogFile(Index).IndexOf(LogDelimiter))
         Next
         LoadLogFile()
     End Sub
@@ -299,6 +299,15 @@ AddLine:
         Area.CursorX.AxisType = AxisType.Primary
         Area.CursorX.IntervalType = DateTimeIntervalType.Number
         Area.CursorX.Interval = 0.0R
+
+        If My.Settings.Chart_ZeroLine Then
+            Dim ZeroLine As New StripLine
+            ZeroLine.Interval = 0
+            ZeroLine.IntervalOffset = 0
+            ZeroLine.BorderWidth = 3
+            ZeroLine.BorderColor = Color.Firebrick
+            Area.AxisY.StripLines.Add(ZeroLine)
+        End If
 
     End Sub
 

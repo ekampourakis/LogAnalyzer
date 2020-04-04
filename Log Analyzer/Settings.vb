@@ -47,6 +47,8 @@
         End If
         CheckBox_LimitCPU.Checked = My.Settings.Chart_LimitCPU
         CheckBox_ReduceFlicker.Checked = My.Settings.Chart_LimitFlicker
+        CheckBox_ZeroLine.Checked = My.Settings.Chart_ZeroLine
+
         Button_Save.Enabled = False
         _ValueChanged = False
     End Sub
@@ -98,6 +100,8 @@
         End If
         My.Settings.Chart_LimitCPU = CheckBox_LimitCPU.Checked
         My.Settings.Chart_LimitFlicker = CheckBox_ReduceFlicker.Checked
+        My.Settings.Chart_ZeroLine = CheckBox_ZeroLine.Checked
+
         My.Settings.Save()
         _ValueChanged = False
         Button_Save.Enabled = False
@@ -115,6 +119,10 @@
     End Sub
 
     Private Sub CheckBox_ReduceFlicker_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ReduceFlicker.CheckedChanged
+        ValueChanged()
+    End Sub
+
+    Private Sub CheckBox_ZeroLine_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_ZeroLine.CheckedChanged
         ValueChanged()
     End Sub
 End Class
