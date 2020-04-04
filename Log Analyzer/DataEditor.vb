@@ -86,6 +86,22 @@
         Main.DataUpdated()
     End Sub
 
+    Private Sub Crop(ByVal Amount As Double, ByVal Above As Boolean, ByVal Column As Integer)
+        Dim LogFile As String() = Main.LogFile
+        Dim Delimiter As String = Main.LogDelimiter
+        For Index As Integer = 1 To LogFile.Length - 1
+            Dim Line As String() = LogFile(Index).Split(Delimiter)
+            If Above Then
+                Line(Column) = Math.Min(CDbl(Line(Column)), Amount)
+            Else
+                Line(Column) = Math.Max(CDbl(Line(Column)), Amount)
+            End If
+            LogFile(Index) = String.Join(Delimiter, Line)
+        Next
+        Main.LogFile = LogFile
+        Main.DataUpdated()
+    End Sub
+
     Private Sub Lock()
         GroupBox_DataEditing.Enabled = False
         GroupBox_DataFiltering.Enabled = False
@@ -151,4 +167,17 @@
     Private Sub CheckBox_TopMost_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox_TopMost.CheckedChanged
         TopMost = CheckBox_TopMost.Checked
     End Sub
+
+    Private Sub Button_CropAbove_Click(sender As Object, e As EventArgs) Handles Button_CropAbove.Click
+        Lock()
+        Crop(NumericUpDown_Crop.Value, True, ComboBox_Series.SelectedIndex)
+        Unlock()
+    End Sub
+
+    Private Sub Button_CropBelow_Click(sender As Object, e As EventArgs) Handles Button_CropBelow.Click
+        Lock()
+        Crop(NumericUpDown_Crop.Value, False, ComboBox_Series.SelectedIndex)
+        Unlock()
+    End Sub
+
 End Class
