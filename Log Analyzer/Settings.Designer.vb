@@ -164,7 +164,7 @@ Partial Class Settings
         Me.Button_Reload.Name = "Button_Reload"
         Me.Button_Reload.Size = New System.Drawing.Size(93, 23)
         Me.Button_Reload.TabIndex = 11
-        Me.Button_Reload.Text = "Reload"
+        Me.Button_Reload.Text = "Reload Settings"
         Me.Button_Reload.UseVisualStyleBackColor = True
         '
         'Button_Save

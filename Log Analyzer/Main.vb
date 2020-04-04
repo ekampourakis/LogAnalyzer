@@ -428,6 +428,9 @@ AddLine:
                     SetChartArea(Area)
                     ChartResetScale = Area.AxisX.ScaleView
 
+                    If KeepScale Then ZoomChart(ScaleSize, ScalePosition)
+
+
                     UpdateScales()
                 End If
             Next
@@ -442,6 +445,8 @@ AddLine:
 #End Region
 
 #Region "Chart"
+
+    Private KeepScale As Boolean = False
 
     Private ScaleSize As Double = 0 ' auto calculated when series are loaded
     Private MaxScaleSize As Double = 0 ' auto calculated when series are loaded
@@ -512,8 +517,9 @@ AddLine:
             Chart.ChartAreas(0).AxisX.ScaleView.Size = ScaleSize
             Chart.ChartAreas(0).AxisX.ScaleView.Position = ScalePosition
             SyncChartAreas(Chart.ChartAreas(0))
+            UpdateScales()
+            AutoScaleY()
         End If
-
     End Sub
 
     ' FIXME: Fix the zooming out when one side is already fully shown
@@ -713,7 +719,9 @@ AddLine:
     End Sub
 
     Public Sub DataUpdated()
+        KeepScale = True
         UpdateChart()
+        KeepScale = False
     End Sub
 
 #End Region
