@@ -62,6 +62,9 @@ Partial Class Main
         Me.SaveFileDialog = New System.Windows.Forms.SaveFileDialog()
         Me.ExportImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ImageExportDialog = New System.Windows.Forms.SaveFileDialog()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MarkPointToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClearMarksToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -83,64 +86,64 @@ Partial Class Main
         'ContextMenuStrip_Chart
         '
         Me.ContextMenuStrip_Chart.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.DataEditorToolStripMenuItem, Me.ToolStripSeparator4, Me.TrimToSelectionToolStripMenuItem})
+        Me.ContextMenuStrip_Chart.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ResetScaleToolStripMenuItem, Me.ToolStripSeparator1, Me.ZoomToSelectionToolStripMenuItem, Me.ToolStripSeparator2, Me.HideLegendsToolStripMenuItem, Me.HideAnnotationsToolStripMenuItem, Me.ToolStripSeparator3, Me.DataEditorToolStripMenuItem, Me.ToolStripSeparator4, Me.TrimToSelectionToolStripMenuItem, Me.ToolStripSeparator5, Me.MarkPointToolStripMenuItem, Me.ClearMarksToolStripMenuItem})
         Me.ContextMenuStrip_Chart.Name = "ContextMenuStrip_Chart"
-        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(174, 160)
+        Me.ContextMenuStrip_Chart.Size = New System.Drawing.Size(181, 232)
         '
         'ResetScaleToolStripMenuItem
         '
         Me.ResetScaleToolStripMenuItem.Name = "ResetScaleToolStripMenuItem"
-        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.ResetScaleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ResetScaleToolStripMenuItem.Text = "Reset Scale"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(170, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
         '
         'ZoomToSelectionToolStripMenuItem
         '
         Me.ZoomToSelectionToolStripMenuItem.Name = "ZoomToSelectionToolStripMenuItem"
-        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.ZoomToSelectionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ZoomToSelectionToolStripMenuItem.Text = "Zoom To Selection"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(170, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(177, 6)
         '
         'HideLegendsToolStripMenuItem
         '
         Me.HideLegendsToolStripMenuItem.Name = "HideLegendsToolStripMenuItem"
-        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.HideLegendsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.HideLegendsToolStripMenuItem.Text = "Hide Legends"
         '
         'HideAnnotationsToolStripMenuItem
         '
         Me.HideAnnotationsToolStripMenuItem.Name = "HideAnnotationsToolStripMenuItem"
-        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.HideAnnotationsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.HideAnnotationsToolStripMenuItem.Text = "Hide Annotations"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(170, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
         '
         'DataEditorToolStripMenuItem
         '
         Me.DataEditorToolStripMenuItem.Name = "DataEditorToolStripMenuItem"
-        Me.DataEditorToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.DataEditorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.DataEditorToolStripMenuItem.Text = "Data Editor"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(170, 6)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(177, 6)
         '
         'TrimToSelectionToolStripMenuItem
         '
         Me.TrimToSelectionToolStripMenuItem.Name = "TrimToSelectionToolStripMenuItem"
-        Me.TrimToSelectionToolStripMenuItem.Size = New System.Drawing.Size(173, 22)
+        Me.TrimToSelectionToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.TrimToSelectionToolStripMenuItem.Text = "Trim To Selection"
         '
         'CheckedListBox
@@ -327,6 +330,23 @@ Partial Class Main
         Me.ImageExportDialog.Filter = "PNG Image|*png"
         Me.ImageExportDialog.Title = "Export chart as image..."
         '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(177, 6)
+        '
+        'MarkPointToolStripMenuItem
+        '
+        Me.MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
+        Me.MarkPointToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MarkPointToolStripMenuItem.Text = "Mark Point"
+        '
+        'ClearMarksToolStripMenuItem
+        '
+        Me.ClearMarksToolStripMenuItem.Name = "ClearMarksToolStripMenuItem"
+        Me.ClearMarksToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ClearMarksToolStripMenuItem.Text = "Clear Marks"
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -396,4 +416,7 @@ Partial Class Main
     Friend WithEvents SaveFileDialog As SaveFileDialog
     Friend WithEvents ExportImageToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ImageExportDialog As SaveFileDialog
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents MarkPointToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ClearMarksToolStripMenuItem As ToolStripMenuItem
 End Class

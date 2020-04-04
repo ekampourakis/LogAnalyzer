@@ -762,6 +762,8 @@ AddLine:
         ToolTip.Hide(Chart)
     End Sub
 
+    Private PointXValue As Double = 0
+
     Private Sub Chart_MouseMove(sender As Object, e As MouseEventArgs) Handles Chart.MouseMove
         Static LastFire As DateTime = Now()
         Dim Interval As Integer = 1000 / If(My.Settings.Chart_LimitCPU, 24, 60)
@@ -828,6 +830,8 @@ AddLine:
 
                     ' Find the point closest to the X-axis value
                     Point = ClosestPoint(Series.Points, XValue)
+                    PointXValue = Point.XValue
+
                     If Not FirstAreaOnly Then
                         PointTime = Point.XValue
                         FirstAreaOnly = True
@@ -927,7 +931,6 @@ AddLine:
 #End Region
 
 #Region "Chart Menu"
-
     Private Function SelectionSize() As Double
         If Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionEnd()) Or Double.IsNaN(Chart.ChartAreas(0).CursorX.SelectionStart) Then
             Return 0
@@ -970,10 +973,6 @@ AddLine:
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        Chart.Series(1).ChartArea = Chart.ChartAreas(0).Name
-    End Sub
-
     Private Sub TrimToSelectionToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TrimToSelectionToolStripMenuItem.Click
         TrimLog()
     End Sub
@@ -985,6 +984,38 @@ AddLine:
     Private Sub ExportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportToolStripMenuItem.Click
         SaveFileDialog.FileName = LogPath.Substring(LogPath.LastIndexOf("\") + 1)
         SaveFileDialog.ShowDialog()
+    End Sub
+
+    Private Sub ExportImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportImageToolStripMenuItem.Click
+        ImageExportDialog.ShowDialog()
+    End Sub
+
+    Private Sub MarkPointToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MarkPointToolStripMenuItem.Click
+        For Each Area As ChartArea In Chart.ChartAreas
+            Dim SeriesName As String = Area.Name.Replace("ChartArea_", "Series_")
+            Dim Series = Chart.Series(SeriesName)
+            For Index As Integer = 0 To Series.Points().Count - 1
+                If Series.Points(Index).XValue = PointXValue Then
+                    Chart.Series(SeriesName).Points(Index).MarkerColor = Color.Red
+                    Chart.Series(SeriesName).Points(Index).MarkerSize = 10
+                    Chart.Series(SeriesName).Points(Index).MarkerStyle = MarkerStyle.Diamond
+                    Exit For
+                End If
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub ClearMarksToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClearMarksToolStripMenuItem.Click
+        For Each Area As ChartArea In Chart.ChartAreas
+            Dim SeriesName As String = Area.Name.Replace("ChartArea_", "Series_")
+            Dim Series = Chart.Series(SeriesName)
+            For Index As Integer = 0 To Series.Points().Count - 1
+                Chart.Series(SeriesName).Points(Index).MarkerSize = 0
+                Chart.Series(SeriesName).Points(Index).MarkerStyle = MarkerStyle.None
+            Next
+        Next
     End Sub
 
 #End Region
@@ -1020,10 +1051,6 @@ AddLine:
 
     Private Sub Test()
 
-    End Sub
-
-    Private Sub ExportImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportImageToolStripMenuItem.Click
-        ImageExportDialog.ShowDialog()
     End Sub
 
     Private Sub ImageExportDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ImageExportDialog.FileOk

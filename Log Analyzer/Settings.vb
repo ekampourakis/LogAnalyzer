@@ -40,9 +40,9 @@
         TrackBar_XGrids.Value = My.Settings.Chart_Scale_AxisX_Grids
         TrackBar_MaxAreas.Value = My.Settings.Chart_MaxChartAreas
         TrackBar_BorderSize.Value = My.Settings.Chart_Border_Size * 10
-        If My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastLine Then
+        If My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.Line Then
             ComboBox_SeriesType.SelectedIndex = 0
-        ElseIf My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastPoint Then
+        ElseIf My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.Point Then
             ComboBox_SeriesType.SelectedIndex = 1
         End If
         CheckBox_LimitCPU.Checked = My.Settings.Chart_LimitCPU
@@ -94,9 +94,9 @@
         My.Settings.Chart_MaxChartAreas = TrackBar_MaxAreas.Value
         My.Settings.Chart_Border_Size = TrackBar_BorderSize.Value / 10.0
         If ComboBox_SeriesType.SelectedIndex = 0 Then
-            My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastLine
+            My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.Line
         Else
-            My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.FastPoint
+            My.Settings.Chart_Series_Type = DataVisualization.Charting.SeriesChartType.Point
         End If
         My.Settings.Chart_LimitCPU = CheckBox_LimitCPU.Checked
         My.Settings.Chart_LimitFlicker = CheckBox_ReduceFlicker.Checked
