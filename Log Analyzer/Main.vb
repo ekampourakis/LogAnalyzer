@@ -1022,6 +1022,16 @@ AddLine:
 
     End Sub
 
+    Private Sub ExportImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExportImageToolStripMenuItem.Click
+        ImageExportDialog.ShowDialog()
+    End Sub
+
+    Private Sub ImageExportDialog_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ImageExportDialog.FileOk
+        Dim bmp As New Bitmap(Chart.Width, Chart.Height)
+        Chart.DrawToBitmap(bmp, Chart.DisplayRectangle)
+        bmp.Save(ImageExportDialog.FileName, System.Drawing.Imaging.ImageFormat.Png)
+    End Sub
+
     'Private Sub Chart_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
 
     '    Select Case e.KeyCode

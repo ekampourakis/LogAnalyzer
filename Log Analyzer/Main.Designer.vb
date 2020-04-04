@@ -60,6 +60,8 @@ Partial Class Main
         Me.Label_Breakpoint = New System.Windows.Forms.Label()
         Me.PictureBox_LoadLog = New System.Windows.Forms.PictureBox()
         Me.SaveFileDialog = New System.Windows.Forms.SaveFileDialog()
+        Me.ExportImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImageExportDialog = New System.Windows.Forms.SaveFileDialog()
         CType(Me.Chart, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ContextMenuStrip_Chart.SuspendLayout()
         Me.MenuStrip.SuspendLayout()
@@ -164,7 +166,7 @@ Partial Class Main
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.ExportToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenToolStripMenuItem, Me.ExportToolStripMenuItem, Me.ExportImageToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -312,6 +314,19 @@ Partial Class Main
         Me.SaveFileDialog.Filter = "Log Files|*.txt|All Files|*.*"
         Me.SaveFileDialog.Title = "Export the log file..."
         '
+        'ExportImageToolStripMenuItem
+        '
+        Me.ExportImageToolStripMenuItem.Name = "ExportImageToolStripMenuItem"
+        Me.ExportImageToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExportImageToolStripMenuItem.Text = "Export Image"
+        '
+        'ImageExportDialog
+        '
+        Me.ImageExportDialog.DefaultExt = "PNG Image|*png"
+        Me.ImageExportDialog.FileName = "Export.png"
+        Me.ImageExportDialog.Filter = "PNG Image|*png"
+        Me.ImageExportDialog.Title = "Export chart as image..."
+        '
         'Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -379,4 +394,6 @@ Partial Class Main
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents DataEditorToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SaveFileDialog As SaveFileDialog
+    Friend WithEvents ExportImageToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ImageExportDialog As SaveFileDialog
 End Class
