@@ -26,6 +26,10 @@ Partial Class DataEditor
         Me.Label_Series = New System.Windows.Forms.Label()
         Me.ComboBox_Series = New System.Windows.Forms.ComboBox()
         Me.GroupBox_DataEditing = New System.Windows.Forms.GroupBox()
+        Me.Button_CropAbove = New System.Windows.Forms.Button()
+        Me.Button_CropBelow = New System.Windows.Forms.Button()
+        Me.NumericUpDown_Crop = New System.Windows.Forms.NumericUpDown()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown_Factor = New System.Windows.Forms.NumericUpDown()
         Me.Button_Divide = New System.Windows.Forms.Button()
@@ -46,11 +50,8 @@ Partial Class DataEditor
         Me.Button_Reset = New System.Windows.Forms.Button()
         Me.Button_Save = New System.Windows.Forms.Button()
         Me.CheckBox_TopMost = New System.Windows.Forms.CheckBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.NumericUpDown_Crop = New System.Windows.Forms.NumericUpDown()
-        Me.Button_CropBelow = New System.Windows.Forms.Button()
-        Me.Button_CropAbove = New System.Windows.Forms.Button()
         Me.GroupBox_DataEditing.SuspendLayout()
+        CType(Me.NumericUpDown_Crop, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_Factor, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown_Offset, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_DataFiltering.SuspendLayout()
@@ -58,7 +59,6 @@ Partial Class DataEditor
         CType(Me.NumericUpDown_MA_WindowSize, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox_EMA.SuspendLayout()
         CType(Me.NumericUpDown_EMA_Alpha, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown_Crop, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label_Series
@@ -98,10 +98,47 @@ Partial Class DataEditor
         Me.GroupBox_DataEditing.Enabled = False
         Me.GroupBox_DataEditing.Location = New System.Drawing.Point(12, 52)
         Me.GroupBox_DataEditing.Name = "GroupBox_DataEditing"
-        Me.GroupBox_DataEditing.Size = New System.Drawing.Size(272, 213)
+        Me.GroupBox_DataEditing.Size = New System.Drawing.Size(272, 218)
         Me.GroupBox_DataEditing.TabIndex = 2
         Me.GroupBox_DataEditing.TabStop = False
         Me.GroupBox_DataEditing.Text = "Data Editing"
+        '
+        'Button_CropAbove
+        '
+        Me.Button_CropAbove.Location = New System.Drawing.Point(56, 155)
+        Me.Button_CropAbove.Name = "Button_CropAbove"
+        Me.Button_CropAbove.Size = New System.Drawing.Size(75, 23)
+        Me.Button_CropAbove.TabIndex = 11
+        Me.Button_CropAbove.Text = "Crop Above"
+        Me.Button_CropAbove.UseVisualStyleBackColor = True
+        '
+        'Button_CropBelow
+        '
+        Me.Button_CropBelow.Location = New System.Drawing.Point(56, 184)
+        Me.Button_CropBelow.Name = "Button_CropBelow"
+        Me.Button_CropBelow.Size = New System.Drawing.Size(75, 23)
+        Me.Button_CropBelow.TabIndex = 10
+        Me.Button_CropBelow.Text = "Crop Below"
+        Me.Button_CropBelow.UseVisualStyleBackColor = True
+        '
+        'NumericUpDown_Crop
+        '
+        Me.NumericUpDown_Crop.DecimalPlaces = 3
+        Me.NumericUpDown_Crop.Location = New System.Drawing.Point(9, 129)
+        Me.NumericUpDown_Crop.Maximum = New Decimal(New Integer() {0, 1, 0, 0})
+        Me.NumericUpDown_Crop.Minimum = New Decimal(New Integer() {0, 1, 0, -2147483648})
+        Me.NumericUpDown_Crop.Name = "NumericUpDown_Crop"
+        Me.NumericUpDown_Crop.Size = New System.Drawing.Size(122, 20)
+        Me.NumericUpDown_Crop.TabIndex = 9
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(6, 113)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(52, 13)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "Cropping:"
         '
         'Label2
         '
@@ -186,7 +223,7 @@ Partial Class DataEditor
         Me.GroupBox_DataFiltering.Enabled = False
         Me.GroupBox_DataFiltering.Location = New System.Drawing.Point(290, 12)
         Me.GroupBox_DataFiltering.Name = "GroupBox_DataFiltering"
-        Me.GroupBox_DataFiltering.Size = New System.Drawing.Size(227, 282)
+        Me.GroupBox_DataFiltering.Size = New System.Drawing.Size(227, 287)
         Me.GroupBox_DataFiltering.TabIndex = 3
         Me.GroupBox_DataFiltering.TabStop = False
         Me.GroupBox_DataFiltering.Text = "Data Filtering"
@@ -209,7 +246,7 @@ Partial Class DataEditor
         Me.Button_MA_Apply.Name = "Button_MA_Apply"
         Me.Button_MA_Apply.Size = New System.Drawing.Size(75, 23)
         Me.Button_MA_Apply.TabIndex = 9
-        Me.Button_MA_Apply.Text = "Apply"
+        Me.Button_MA_Apply.Text = "Filter"
         Me.Button_MA_Apply.UseVisualStyleBackColor = True
         '
         'NumericUpDown_MA_WindowSize
@@ -247,7 +284,7 @@ Partial Class DataEditor
         Me.Button_EMA_Apply.Name = "Button_EMA_Apply"
         Me.Button_EMA_Apply.Size = New System.Drawing.Size(75, 23)
         Me.Button_EMA_Apply.TabIndex = 9
-        Me.Button_EMA_Apply.Text = "Apply"
+        Me.Button_EMA_Apply.Text = "Filter"
         Me.Button_EMA_Apply.UseVisualStyleBackColor = True
         '
         'NumericUpDown_EMA_Alpha
@@ -273,7 +310,7 @@ Partial Class DataEditor
         'Button_Reset
         '
         Me.Button_Reset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_Reset.Location = New System.Drawing.Point(12, 271)
+        Me.Button_Reset.Location = New System.Drawing.Point(12, 276)
         Me.Button_Reset.Name = "Button_Reset"
         Me.Button_Reset.Size = New System.Drawing.Size(75, 23)
         Me.Button_Reset.TabIndex = 4
@@ -283,7 +320,7 @@ Partial Class DataEditor
         'Button_Save
         '
         Me.Button_Save.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Button_Save.Location = New System.Drawing.Point(209, 271)
+        Me.Button_Save.Location = New System.Drawing.Point(209, 276)
         Me.Button_Save.Name = "Button_Save"
         Me.Button_Save.Size = New System.Drawing.Size(75, 23)
         Me.Button_Save.TabIndex = 5
@@ -294,55 +331,18 @@ Partial Class DataEditor
         '
         Me.CheckBox_TopMost.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox_TopMost.AutoSize = True
-        Me.CheckBox_TopMost.Location = New System.Drawing.Point(104, 277)
+        Me.CheckBox_TopMost.Location = New System.Drawing.Point(104, 282)
         Me.CheckBox_TopMost.Name = "CheckBox_TopMost"
         Me.CheckBox_TopMost.Size = New System.Drawing.Size(90, 17)
         Me.CheckBox_TopMost.TabIndex = 6
         Me.CheckBox_TopMost.Text = "Keep On Top"
         Me.CheckBox_TopMost.UseVisualStyleBackColor = True
         '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(6, 113)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(52, 13)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Cropping:"
-        '
-        'NumericUpDown_Crop
-        '
-        Me.NumericUpDown_Crop.DecimalPlaces = 3
-        Me.NumericUpDown_Crop.Location = New System.Drawing.Point(9, 129)
-        Me.NumericUpDown_Crop.Maximum = New Decimal(New Integer() {0, 1, 0, 0})
-        Me.NumericUpDown_Crop.Minimum = New Decimal(New Integer() {0, 1, 0, -2147483648})
-        Me.NumericUpDown_Crop.Name = "NumericUpDown_Crop"
-        Me.NumericUpDown_Crop.Size = New System.Drawing.Size(122, 20)
-        Me.NumericUpDown_Crop.TabIndex = 9
-        '
-        'Button_CropBelow
-        '
-        Me.Button_CropBelow.Location = New System.Drawing.Point(56, 184)
-        Me.Button_CropBelow.Name = "Button_CropBelow"
-        Me.Button_CropBelow.Size = New System.Drawing.Size(75, 23)
-        Me.Button_CropBelow.TabIndex = 10
-        Me.Button_CropBelow.Text = "Crop Below"
-        Me.Button_CropBelow.UseVisualStyleBackColor = True
-        '
-        'Button_CropAbove
-        '
-        Me.Button_CropAbove.Location = New System.Drawing.Point(56, 155)
-        Me.Button_CropAbove.Name = "Button_CropAbove"
-        Me.Button_CropAbove.Size = New System.Drawing.Size(75, 23)
-        Me.Button_CropAbove.TabIndex = 11
-        Me.Button_CropAbove.Text = "Crop Above"
-        Me.Button_CropAbove.UseVisualStyleBackColor = True
-        '
         'DataEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(529, 306)
+        Me.ClientSize = New System.Drawing.Size(529, 311)
         Me.Controls.Add(Me.CheckBox_TopMost)
         Me.Controls.Add(Me.Button_Save)
         Me.Controls.Add(Me.Button_Reset)
@@ -351,11 +351,14 @@ Partial Class DataEditor
         Me.Controls.Add(Me.ComboBox_Series)
         Me.Controls.Add(Me.Label_Series)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(545, 248)
+        Me.MaximumSize = New System.Drawing.Size(545, 350)
+        Me.MinimumSize = New System.Drawing.Size(545, 350)
         Me.Name = "DataEditor"
         Me.Text = "UoP Racing - Data Editor"
+        Me.TopMost = True
         Me.GroupBox_DataEditing.ResumeLayout(False)
         Me.GroupBox_DataEditing.PerformLayout()
+        CType(Me.NumericUpDown_Crop, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_Factor, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown_Offset, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox_DataFiltering.ResumeLayout(False)
@@ -365,7 +368,6 @@ Partial Class DataEditor
         Me.GroupBox_EMA.ResumeLayout(False)
         Me.GroupBox_EMA.PerformLayout()
         CType(Me.NumericUpDown_EMA_Alpha, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown_Crop, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
